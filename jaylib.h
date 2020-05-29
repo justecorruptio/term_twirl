@@ -13,15 +13,7 @@ typedef union {
 
 class Jaylib: public Arduboy2Base {
     public:
-
-    void drawSprite(int x, int y, const uint8_t * sprite, uint8_t rev);
-    void drawBand(int x, int y, const uint8_t * sprite, const uint8_t * mask, uint8_t cols, uint8_t rev);
-
-    void drawFastVLine(int16_t x, int16_t y, uint8_t h, uint8_t color);
-
-    void poll(uint8_t rate); // repeat rate in frames
-    uint8_t held(uint8_t buttons);
-    uint8_t on(uint8_t buttons);
+    void drawBand(int x, int y, const uint8_t * sprite, const uint16_t mask, uint8_t cols);
 
     void smallPrint(const uint8_t * str);
     void largePrint(const uint8_t * str, int kern);
@@ -29,11 +21,7 @@ class Jaylib: public Arduboy2Base {
     void setCursor(int x, int y);
 
     protected:
-
-    uint8_t buttons = 0, buttonsHeld = 0, buttonsEdge = 0, buttonsCount = 0;
     int cursor_x, cursor_y;
-
 };
-
 
 #endif
