@@ -8,7 +8,7 @@ for line in fh:
 
 fh.close()
 
-N = 2000
+N = 3000
 SIXES = []
 fh = open('count_1w.txt', 'r')
 for line in fh:
