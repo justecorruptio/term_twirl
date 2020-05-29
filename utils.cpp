@@ -13,7 +13,7 @@ char * itoa(char * buf, int32_t x) {
     uint8_t i;
     if(x == 0) {
         buf[0] = '0', buf[1] = '\0';
-        return;
+        return buf;
     }
     else if(x < 0)
         x = -x, *(buf++) = '-';

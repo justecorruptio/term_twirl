@@ -103,6 +103,9 @@ int Dawg::sort_results() {
 int Dawg::checkWord(char* word) {
     // Returns word position or -1
     int i;
+    int len = strlen(word);
+    if(len == 0) return -3;
+    if(len < 3) return -2;
     for(i = 0; i < results_ptr; i++) {
         if(strcmp(word, results[i]) == 0)
             return i;

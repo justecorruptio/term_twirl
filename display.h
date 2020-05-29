@@ -3,6 +3,7 @@
 
 #include <Arduboy2.h>
 #include "jaylib.h"
+#include "utils.h"
 #include "dawg.h"
 #include "guess.h"
 
@@ -15,6 +16,8 @@ class Display {
 
     int renderDawgResults(uint16_t *solved_mask);
     int renderChrome();
+    int renderScores(uint32_t cur_score, uint32_t high_score);
+    int renderTime(uint32_t time_left);
     int renderGuess();
 
     int renderTitle();
@@ -24,6 +27,10 @@ class Display {
     Dawg &dawg;
     Guess &guess;
 
+    int setMessage(char* msg, uint32_t ttl);
+    int renderMessage();
+    char * message_ptr;
+    uint32_t messageTTL;
 };
 
 #endif

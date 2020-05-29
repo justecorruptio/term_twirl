@@ -27,10 +27,33 @@ int Display::renderDawgResults(uint16_t *solved_mask) {
 
 int Display::renderChrome() {
     jay.drawFastVLine(76, 0, 36, 1);
+    jay.drawFastHLine(76, 13, 52, 1);
     jay.drawFastHLine(76, 36, 52, 1);
 
     jay.drawFastVLine(76, 50, 14, 1);
     jay.drawFastHLine(76, 50, 52, 1);
+
+}
+
+int Display::renderScores(uint32_t cur_score, uint32_t high_score) {
+    char buf[8];
+    jay.setCursor(78, 1);
+    jay.smallPrint("SCORE:");
+    jay.setCursor(102, 1);
+    jay.smallPrint(itoa(buf, cur_score));
+
+    jay.setCursor(78, 7);
+    jay.smallPrint(" HIGH:");
+    jay.setCursor(102, 7);
+    jay.smallPrint(itoa(buf, high_score));
+}
+
+int Display::renderTime(uint32_t time_left) {
+    char buf[8];
+    jay.setCursor(78, 15);
+    jay.smallPrint(" TIME:");
+    jay.setCursor(102, 15);
+    jay.smallPrint(itoa(buf, time_left / 10));
 }
 
 int Display::renderTitle() {
@@ -75,4 +98,19 @@ int Display::renderCursor() {
             (i - guess.cursor_counter / 4) % 4 == 0);
     }
 
+}
+
+int Display::setMessage(char* msg, uint32_t ttl) {
+    messageTTL = ttl;
+    message_ptr = msg;
+
+}
+
+int Display::renderMessage() {
+    if (! message_ptr || (messageTTL == 0))
+        return;
+    messageTTL --;
+
+    jay.setCursor(78, 30);
+    jay.smallPrint(message_ptr);
 }
