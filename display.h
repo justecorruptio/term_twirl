@@ -30,7 +30,7 @@ class Display {
     Dawg &dawg;
     Guess &guess;
 
-    int setMessage(char* msg, uint32_t ttl);
+    int setMessage(char* msg);
     int renderMessage();
     char * message_ptr;
     uint32_t messageTTL;

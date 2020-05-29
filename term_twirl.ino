@@ -127,23 +127,23 @@ void loop() {
             len = strlen(word_buf);
             solved = 0;
             if(res == -1) {
-                display.setMessage("NOT A WORD!", 20);
+                display.setMessage("NOT A WORD!");
             } else if (res == -2) {
-                display.setMessage("TOO SHORT!", 20);
+                display.setMessage("TOO SHORT!");
             } else if (res == -3) {
             } else if (res < 16) {
                 if (!(solved_mask[0] & (1 << res))) {
                     solved_mask[0] |= (1 << res);
                     solved = 1;
                 } else {
-                    display.setMessage("IT'S THERE.", 20);
+                    display.setMessage("IT'S THERE.");
                 }
             } else {
                 if (!(solved_mask[1] & (1 << (res - 16)))) {
                     solved_mask[1] |= (1 << (res - 16));
                     solved = 1;
                 } else {
-                    display.setMessage("IT'S THERE.", 20);
+                    display.setMessage("IT'S THERE.");
                 }
             }
             if(solved) {
@@ -151,7 +151,7 @@ void loop() {
                 if(len == 6) {
                     target_solved = 1;
                 }
-                display.setMessage(MESSAGES[len - 3], 20);
+                display.setMessage(MESSAGES[len - 3]);
                 score += (len - 2) * (len - 2);
                 if (score > high_score) {
                     high_score = score;
@@ -167,6 +167,11 @@ void loop() {
             }
         }
         if(num_solved == dawg.results_ptr){
+            score += 50;
+            if (score > high_score) {
+                high_score = score;
+                setHighScore();
+            }
             stage = STAGE_NEXT;
         }
         break;

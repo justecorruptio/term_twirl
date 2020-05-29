@@ -100,10 +100,9 @@ int Display::renderCursor() {
 
 }
 
-int Display::setMessage(char* msg, uint32_t ttl) {
-    messageTTL = ttl;
+int Display::setMessage(char* msg) {
+    messageTTL = 30;
     message_ptr = msg;
-
 }
 
 int Display::renderMessage() {
