@@ -23,6 +23,9 @@ class Display {
     int renderTitle();
     int renderCursor();
 
+    int renderNext();
+    int renderGameOver();
+
     Jaylib &jay;
     Dawg &dawg;
     Guess &guess;

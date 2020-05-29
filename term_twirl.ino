@@ -53,7 +53,7 @@ void setHighScore() {
 }
 
 void load() {
-    dawg.setup(OP_MODE_SELECT, 345);
+    dawg.setup(OP_MODE_SELECT, random(1, dawg.target_count - 1));
     dawg.traverse();
     word_hash = lex_hash(dawg.results[0]);
 
@@ -68,7 +68,7 @@ void load() {
     num_solved = 0;
     target_solved = 0;
 
-    time_left = 9999;
+    time_left = 999;
 }
 
 void setup() {
@@ -96,6 +96,7 @@ void loop() {
         case STAGE_TITLE:
         display.renderTitle();
         if(jay.justPressed(A_BUTTON) || jay.justPressed(B_BUTTON)) {
+            jay.initRandomSeed();
             load();
             score = 0;
             loadHighScore();
@@ -164,6 +165,32 @@ void loop() {
             }
         }
         if(num_solved == dawg.results_ptr){
+            stage = STAGE_NEXT;
+        }
+        break;
+
+        case STAGE_NEXT:
+        solved_mask[0] = 0xFFFF;
+        solved_mask[1] = 0xFFFF;
+        display.renderChrome();
+        display.renderDawgResults(solved_mask);
+        display.renderScores(score, high_score);
+        display.renderNext();
+        if(jay.justPressed(A_BUTTON)) {
+            load();
+            stage = STAGE_PLAY;
+        }
+        break;
+
+        case STAGE_GAME_OVER:
+        solved_mask[0] = 0xFFFF;
+        solved_mask[1] = 0xFFFF;
+        display.renderChrome();
+        display.renderDawgResults(solved_mask);
+        display.renderScores(score, high_score);
+        display.renderGameOver();
+        if(jay.justPressed(A_BUTTON)) {
+            stage = STAGE_TITLE;
         }
         break;
     }

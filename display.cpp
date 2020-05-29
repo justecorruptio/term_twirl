@@ -114,3 +114,13 @@ int Display::renderMessage() {
     jay.setCursor(78, 30);
     jay.smallPrint(message_ptr);
 }
+
+int Display::renderNext() {
+    jay.setCursor(78, 15);
+    jay.smallPrint("NEXT ROUND!");
+}
+
+int Display::renderGameOver() {
+    jay.setCursor(78, 15);
+    jay.smallPrint("GAME OVER!");
+}
