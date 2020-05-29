@@ -68,7 +68,7 @@ void load() {
     num_solved = 0;
     target_solved = 0;
 
-    time_left = 999;
+    time_left = 9999;
 }
 
 void setup() {
@@ -120,6 +120,8 @@ void loop() {
             guess.handleSelect();
         if(jay.justPressed(DOWN_BUTTON))
             guess.handleDelete();
+        if(jay.justPressed(B_BUTTON))
+            guess.handleReturnShuffle();
         if(jay.justPressed(A_BUTTON)) {
             res = dawg.checkWord(guess.getWord(word_buf));
             len = strlen(word_buf);

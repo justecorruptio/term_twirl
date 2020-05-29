@@ -56,3 +56,21 @@ int Guess::handleDelete() {
 
     guess_mask &= ~(1 << guess[-- guess_ptr]);
 }
+
+int Guess::handleReturnShuffle() {
+    int i, a, b;
+    char t;
+    if(guess_ptr > 0) {
+        while(guess_ptr) {
+            handleDelete();
+        }
+    } else {
+        for(i = 0; i < 12; i++) {
+            a = random(0, 6);
+            b = random(0, 6);
+            t = letters[a];
+            letters[a] = letters[b];
+            letters[b] = t;
+        }
+    }
+}

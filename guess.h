@@ -24,6 +24,7 @@ class Guess {
     int handleSelect();
     int handleDelete();
 
+    int handleReturnShuffle();
 
 };
 
