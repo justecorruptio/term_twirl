@@ -2,26 +2,13 @@
 
 int Guess::reset(char * input_letters) {
     strcpy(letters, input_letters);
-    sortLetters();
 
     guess_mask = 0x0;
     guess_ptr = 0;
     guess[0] = '\0';
     cursor_counter = 0;
-}
 
-int Guess::sortLetters() {
-    int i, j;
-    char t;
-    for(i = strlen(letters); i > 0; i --) {
-        for(j = 0; j < i - 1; j ++) {
-            if(letters[j] > letters[j + 1]) {
-                t = letters[j];
-                letters[j] = letters[j + 1];
-                letters[j + 1] = t;
-            }
-        }
-    }
+    handleReturnShuffle();
 }
 
 char* Guess::getWord(char* buf) {

@@ -15,7 +15,6 @@ class Guess {
     int cursor_counter = 0;
 
     int reset(char * input_letters);
-    int sortLetters();
     char* getWord(char* buf);
 
     int cursorLeft();

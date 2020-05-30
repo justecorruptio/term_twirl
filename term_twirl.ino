@@ -80,7 +80,6 @@ void setup() {
     dawg.init();
 
     stage = STAGE_TITLE;
-    //stage = STAGE_PLAY;
 }
 
 
@@ -88,7 +87,7 @@ void loop() {
     int res, len;
     char solved;
     if(!jay.nextFrame()) return;
-    //jay.poll(2);
+
     jay.pollButtons();
     jay.clear();
 
@@ -151,6 +150,10 @@ void loop() {
                 if(len == 6) {
                     target_solved = 1;
                 }
+                if(num_solved == dawg.results_ptr) {
+                    score += 50;
+                    stage = STAGE_NEXT;
+                }
                 display.setMessage(MESSAGES[len - 3]);
                 score += (len - 2) * (len - 2);
                 if (score > high_score) {
@@ -165,14 +168,6 @@ void loop() {
             } else {
                 stage = STAGE_GAME_OVER;
             }
-        }
-        if(num_solved == dawg.results_ptr){
-            score += 50;
-            if (score > high_score) {
-                high_score = score;
-                setHighScore();
-            }
-            stage = STAGE_NEXT;
         }
         break;
 

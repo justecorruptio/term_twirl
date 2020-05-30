@@ -8,10 +8,7 @@
 #include "guess.h"
 
 class Display {
-
     public:
-
-
     Display(Jaylib &arg_jay, Dawg &arg_dawg, Guess &arg_guess);
 
     int renderDawgResults(uint16_t *solved_mask);
