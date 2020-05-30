@@ -23,6 +23,6 @@ When loading a new level, the DAWG is traversed once to pick a random 6-letter w
 words that are subanagrams of that 6-letter word.
 
 ## Sources
-Word Frequencies: Peter Norvig's [Natural Language Corpus](https://norvig.com/ngrams/)
-Word List: [Tournament Word List](https://en.wikipedia.org/wiki/NASPA_Word_List) for North American Scrabble players.
-DAWG Compressor: [DAWG generator](https://github.com/AndrasKovacs/dawg-gen) for Andras Kovacs. 
+- Word Frequencies: Peter Norvig's [Natural Language Corpus](https://norvig.com/ngrams/)
+- Word List: [Tournament Word List](https://en.wikipedia.org/wiki/NASPA_Word_List) for North American Scrabble players.
+- DAWG Compressor: [DAWG generator](https://github.com/AndrasKovacs/dawg-gen) for Andras Kovacs. 
