@@ -20,7 +20,7 @@ fh = open('output.txt', 'r')
 for line in fh:
     word = line.strip()
     h = hx(word)
-    print '%s\t%s' % (word, h)
+    #print '%s\t%s' % (word, h)
     hashes.append(h)
     if len(word) == 6:
         count_sixes += 1
@@ -28,7 +28,7 @@ for line in fh:
 print 'MAX_HASH:', max(hashes)
 print 'SIXES:', count_sixes
 
-freqs = [None] * 26
-for i, l in enumerate(LETTERS):
-    freqs[ord(l) - ord('A')] = PRIMES[i]
-print freqs
+#freqs = [None] * 26
+#for i, l in enumerate(LETTERS):
+#    freqs[ord(l) - ord('A')] = PRIMES[i]
+#print freqs

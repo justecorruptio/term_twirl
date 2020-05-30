@@ -214,8 +214,8 @@ def prompt_packing_mode():
             return mode
 
 
-inp = prompt_filename()
-mode = prompt_packing_mode()
+inp = "output.dawg"
+mode = "3"
 
 t = clock()
 print
