@@ -34,12 +34,11 @@ int Display::renderDawgResults() {
     char q[8] = "???????";
     for(i = 0; i < dawg.results_ptr; i++) {
         len = strlen(dawg.results[i]);
-        jay.setCursor(cur_x, 1 + 6 * (i % 10));
         if(game.checkSolved(i, 0)) {
-            jay.smallPrint(dawg.results[i]);
+            jay.smallPrint(cur_x, 1 + 6 * (i % 10), dawg.results[i]);
         } else {
             q[len] = '\0';
-            jay.smallPrint(q);
+            jay.smallPrint(cur_x, 1 + 6 * (i % 10), q);
             q[len] = '?';
         }
         if ((i % 10 == 9) && (i < dawg.results_ptr - 1)) {
@@ -57,28 +56,21 @@ int Display::renderChrome() {
     jay.drawFastVLine(76, 50, 14, 1);
     jay.drawFastHLine(76, 50, 52, 1);
 
-    jay.setCursor(78, 1);
-    jay.smallPrint("SCORE:");
-    jay.setCursor(102, 1);
-    jay.smallPrint(itoa(buf, game.score));
+    jay.smallPrint(78, 1, "SCORE:");
+    jay.smallPrint(102, 1, itoa(buf, game.score));
 
-    jay.setCursor(78, 7);
-    jay.smallPrint(" HIGH:");
-    jay.setCursor(102, 7);
-    jay.smallPrint(itoa(buf, game.high_score));
+    jay.smallPrint(78, 7, " HIGH:");
+    jay.smallPrint(102, 7, itoa(buf, game.high_score));
 }
 
 int Display::renderTime() {
     char buf[8];
-    jay.setCursor(78, 15);
-    jay.smallPrint(" TIME:");
-    jay.setCursor(102, 15);
-    jay.smallPrint(itoa(buf, game.time_left / 10));
+    jay.smallPrint(78, 15, " TIME:");
+    jay.smallPrint(102, 15, itoa(buf, game.time_left / 10));
 }
 
 int Display::renderTitle() {
-    jay.setCursor(33, 20);
-    jay.largePrint("TERM TWIRL");
+    jay.largePrint(33, 20, "TERM TWIRL");
     jay.drawFastHLine(33, 28, 59, 1);
     jay.drawFastHLine(37, 30, 51, 1);
 }
@@ -86,18 +78,13 @@ int Display::renderTitle() {
 int Display::renderGuess() {
     int i;
     char buf[8] = "\0\0\0\0\0\0\0\0";
-    for(i = 0; guess.letters[i]; i++) {
-        if(guess.guess_mask & (1 << i)){
-            buf[i] = ' ';
-        } else {
-            buf[i] = guess.letters[i];
-        }
-    }
-    jay.setCursor(80, 54);
-    jay.largePrint(buf, 3);
 
-    jay.setCursor(80, 40);
-    jay.largePrint(guess.getWord(buf), 3);
+    for(i = 0; guess.letters[i]; i++)
+        buf[i] = guess.guess_mask & (1 << i) ?  ' ' : guess.letters[i];
+
+    // Order matters here as getWord mutates buf
+    jay.largePrint(80, 54, buf, 3);
+    jay.largePrint(80, 40, guess.getWord(buf), 3);
 }
 
 int Display::renderCursor() {
@@ -131,16 +118,5 @@ int Display::renderMessage() {
         return;
     messageTTL --;
 
-    jay.setCursor(78, 30);
-    jay.smallPrint(message_ptr);
-}
-
-int Display::renderNext() {
-    jay.setCursor(78, 15);
-    jay.smallPrint("NEXT ROUND!");
-}
-
-int Display::renderGameOver() {
-    jay.setCursor(78, 15);
-    jay.smallPrint("GAME OVER!");
+    jay.smallPrint(78, 30, message_ptr);
 }

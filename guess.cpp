@@ -13,9 +13,8 @@ int Guess::reset(char * input_letters) {
 
 char* Guess::getWord(char* buf) {
     int i;
-    for(i = 0; i < guess_ptr; i++) {
+    for(i = 0; i < guess_ptr; i++)
         buf[i] = letters[guess[i]];
-    }
     buf[i] = '\0';
     return buf;
 }
@@ -52,7 +51,7 @@ int Guess::handleReturnShuffle() {
             handleDelete();
         }
     } else {
-        for(i = 0; i < 12; i++) {
+        for(i = 0; i < 11; i++) {
             a = random(0, 6);
             b = random(0, 6);
             t = letters[a];

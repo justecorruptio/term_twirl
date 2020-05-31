@@ -23,29 +23,20 @@ void Jaylib::drawBand(int x, int y, const uint8_t * sprite, const uint16_t mask,
     }
 }
 
-void Jaylib::smallPrint(const uint8_t * str) {
+void Jaylib::smallPrint(int x, int y, const uint8_t * str) {
     char c;
-    for(;c = *str; str ++) {
+    for(;c = *str ++;) {
         c -= 32;
-        drawBand(cursor_x, cursor_y, PRINTABLE_CHARS + 3 * c, 0x3F, 3);
-        cursor_x += 4;
+        drawBand(x, y, PRINTABLE_CHARS + 3 * c, 0x3F, 3);
+        x += 4;
     }
 }
 
-void Jaylib::largePrint(const uint8_t * str, int kern) {
+void Jaylib::largePrint(int x, int y, const uint8_t * str, int kern) {
     char c;
-    for(;c = *str; str ++) {
-        c = (c == ' ') ? 0 : c - 'A' + 1; //TODO: support all ascii
-        drawBand(cursor_x, cursor_y, PRINTABLE_CHARS_LARGE + 5 * c, 0xFF, 5);
-        cursor_x += 5 + kern;
+    for(;c = *str ++;) {
+        c &= 0x1F; // Lucky that SPACE % 32 == 0
+        drawBand(x, y, PRINTABLE_CHARS_LARGE + 5 * c, 0xFF, 5);
+        x += 5 + kern;
     }
-}
-
-void Jaylib::largePrint(const uint8_t * str) {
-    largePrint(str, 1);
-}
-
-void Jaylib::setCursor(int x, int y) {
-    cursor_x = x;
-    cursor_y = y;
 }
