@@ -1,3 +1,4 @@
+from collections import Counter
 import re
 
 fh = open('twl.txt', 'r')
@@ -8,7 +9,8 @@ for line in fh:
 
 fh.close()
 
-N = 3800
+N = 10000
+
 SIXES = []
 fh = open('count_1w.txt', 'r')
 for line in fh:
@@ -19,6 +21,23 @@ for line in fh:
     if len(SIXES) >= N:
         break
 
-for six in sorted(SIXES):
+M = 4500
+postfixes = Counter()
+for six in SIXES:
+    for i in xrange(0, 2):
+        postfixes[six[i:]] += 1
+
+postfix_usage = Counter()
+for six in SIXES:
+    for i in xrange(0, 2):
+        postfix_usage[six] += postfixes[six[i:]]
+
+frequent_sixes = [
+    k
+    for k, v in sorted(postfix_usage.items(), key=lambda x: -x[1])[:M]
+]
+
+
+for six in sorted(frequent_sixes):
     print six
 #print 'MUUMUU'
