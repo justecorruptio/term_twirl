@@ -2,24 +2,19 @@
 #include "utils.h"
 
 void Jaylib::drawBand(int x, int y, const uint8_t * sprite, const uint16_t mask, uint8_t cols) {
-    if(x + cols <= 0 || x >= WIDTH || y + 8 <= 0 || y >= HEIGHT) return;
-
     half_t s, m;
-    int8_t i = x < 0 ? -x : 0;
+    int8_t i;
     int p = (y >> 3) * WIDTH + i + x;
     uint8_t h = y & 7;
 
     if(cols + x >= WIDTH) cols = WIDTH - x;
 
-    for(; i < cols; i ++, p ++) {
+    for(i = 0; i < cols; i ++, p ++) {
         s.v = pgm_read_byte(sprite + i) << h;
         m.v = mask << h;
 
-        if(y >= 0 && y < HEIGHT)
-            sBuffer[p] = sBuffer[p] & ~m.l | s.l & m.l;
-
-        if(h && y > -8 && y < HEIGHT - 8)
-            sBuffer[p + WIDTH] = sBuffer[p + WIDTH] & ~m.h | s.h & m.h;
+        sBuffer[p] = sBuffer[p] & ~m.l | s.l & m.l;
+        sBuffer[p + WIDTH] = sBuffer[p + WIDTH] & ~m.h | s.h & m.h;
     }
 }
 
