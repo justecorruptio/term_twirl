@@ -10,7 +10,7 @@ int Dawg::process(int mode, uint32_t param) {
     results_ptr = 0;
     if(mode == OP_MODE_SELECT)
         op_param = random(1, DICT_DAWG_NUM_TARGETS - 1);
-    traverse();
+    return traverse(DICT_DAWG_START_PTR * 3, 0, 1);
 }
 
 int Dawg::traverse(uint16_t ptr, int buf_ptr, uint32_t hash) {
@@ -34,7 +34,7 @@ int Dawg::traverse(uint16_t ptr, int buf_ptr, uint32_t hash) {
 
         if (w.high & 0x1) { // Word End
             if(op_mode == OP_MODE_SELECT) {
-                if((buf_ptr + 1 == TARGET_LENGTH) && (++counter == op_param)){
+                if((buf_ptr + 1 == TARGET_LENGTH) && (op_param-- == 0)){
                     strcpy(results[0], buffer);
                 }
             } else if(op_param % next_hash == 0) {
@@ -53,36 +53,23 @@ int Dawg::traverse(uint16_t ptr, int buf_ptr, uint32_t hash) {
     buffer[buf_ptr] = 0;
 }
 
-int Dawg::traverse() {
-    counter = 0;
-    return traverse(pgm_read_word(
-        DICT_DAWG + DICT_DAWG_LENGTH - 3
-    ) * 3, 0, 1);
-}
-
 int Dawg::sort_results() {
     char i, j, k, t, *a, *b, al, bl;
-    for(i = results_ptr; i > 0; i --) {
-        for(j = 0; j < i - 1; j ++) {
-            a = results[j];
-            b = results[j + 1];
-            al = strlen(a);
-            bl = strlen(b);
+    for(i = results_ptr; i --;) {
+        for(j = 0; j < i; j ++) {
+            a = results[j], b = results[j + 1];
+            al = strlen(a), bl = strlen(b);
             if(al > bl || (al == bl && strcmp(a, b) > 0)) {
-                for(k = 0; k < 8; k++){
-                    t = a[k];
-                    a[k] = b[k];
-                    b[k] = t;
-                }
+                for(k = 8; k--;)
+                    t = a[k], a[k] = b[k], b[k] = t;
             }
         }
     }
 }
 
 int Dawg::checkWord(char* word) {
-    // Returns word position or -1
-    int i;
-    int len = strlen(word);
+    // Returns word position or negative number
+    int i, len = strlen(word);
     if(len == 0) return -3;
     if(len < 3) return -2;
     for(i = 0; i < results_ptr; i++) {

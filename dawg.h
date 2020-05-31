@@ -16,7 +16,6 @@ class Dawg {
 
     int process(int mode, uint32_t param);
     int traverse(uint16_t ptr, int buf_ptr, uint32_t hash);
-    int traverse();
 
     int sort_results();
     int checkWord(char* word);
@@ -28,7 +27,6 @@ class Dawg {
     char buffer[8];
     int op_mode;
     uint32_t op_param;
-    int counter;
 };
 
 #endif

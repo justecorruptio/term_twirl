@@ -11,7 +11,7 @@ for i, item in enumerate(text):
         print
 
 print '0x00 };'
-print 'const uint16_t DICT_DAWG_LENGTH = %s;' % (len(data),)
+print 'const uint16_t DICT_DAWG_START_PTR = 0x%04X;' % (ord(data[-3]) | (ord(data[-2]) << 8),)
 
 fh = open('output.txt', 'r')
 count = 0
