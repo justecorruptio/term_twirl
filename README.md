@@ -1,6 +1,6 @@
 # TERM TWIRL
 
-This is a clone of Text Twist for Arduboy. There are over 1000 different levels.
+This is a clone of Text Twist for Arduboy. There are over 1600 different levels.
 
 ## Controls
 - Left/Right: Move the cursor.
