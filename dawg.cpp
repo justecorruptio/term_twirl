@@ -3,7 +3,7 @@
 
 Dawg::Dawg() {
     target_count = 0;
-    process(OP_MODE_SELECT, 0xFF);
+    process(OP_MODE_SELECT, 0xFFFF);
 }
 
 int Dawg::process(int mode, uint32_t param) {
@@ -44,9 +44,8 @@ int Dawg::traverse(uint16_t ptr, int buf_ptr, uint32_t hash) {
                 case OP_MODE_SELECT:
                 if(buf_ptr + 1 == TARGET_LENGTH) {
                     counter += 1;
-                    if(op_param == 0xFF) {
-                        if(counter > target_count)
-                            target_count = counter;
+                    if(op_param == 0xFFFF) {
+                        target_count = counter;
                     } else if (counter == op_param){
                         strcpy(results[0], buffer);
                         return 0;
