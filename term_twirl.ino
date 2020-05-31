@@ -3,52 +3,22 @@
 #include "utils.h"
 #include "guess.h"
 
+#include "game.h"
 #include "display.h"
 
-#define STAGE_TITLE 1
-#define STAGE_LOAD 2
-#define STAGE_PLAY 3
-#define STAGE_NEXT 4
-#define STAGE_GAME_OVER 5
+Jaylib jay;
+Dawg dawg;
+Guess guess;
+Game game;
+Display display = Display(jay, dawg, guess, game);
 
 const char* MESSAGES [] = {
     "NICE!", "GREAT!", "AWESOME!", "BRILLIANT!"
 };
 
-const uint32_t EEPROM_MAGIC = 0xF6E290C4;
-
-Jaylib jay;
-Dawg dawg;
-Guess guess;
-Display display = Display(jay, dawg, guess);
-
-int stage;
-uint16_t solved_mask[2] = {0, 0};
-uint32_t num_solved = 0;
-char target_solved = 0;
-uint32_t word_hash;
-uint32_t time_left;
-
-uint32_t score = 0;
-uint32_t high_score = 0;
-
-void loadHighScore() {
-    uint32_t v;
-    EEPROM.get(256, v);
-    if(v != EEPROM_MAGIC) {
-        EEPROM.put(256, EEPROM_MAGIC);
-        high_score = 0;
-        setHighScore();
-        return;
-    }
-    EEPROM.get(264, high_score);
-}
-
-void setHighScore() {
-    EEPROM.put(264, high_score);
-}
-
 void load() {
+    uint32_t word_hash;
+
     dawg.setup(OP_MODE_SELECT, random(1, dawg.target_count - 1));
     dawg.traverse();
     word_hash = lex_hash(dawg.results[0]);
@@ -59,23 +29,17 @@ void load() {
     dawg.traverse();
     dawg.sort_results();
 
-    solved_mask[0] = 0;
-    solved_mask[1] = 0;
-    num_solved = 0;
-    target_solved = 0;
-
-    time_left = 9999;
+    game.reset();
 }
 
 void setup() {
     jay.boot();
-
     jay.invert(1);
     jay.clear();
-
     dawg.init();
+    game.stage = STAGE_TITLE;
 
-    stage = STAGE_TITLE;
+    game.loadHighScore();
 }
 
 void loop() {
@@ -88,25 +52,17 @@ void loop() {
     jay.pollButtons();
     jay.clear();
 
-    switch(stage) {
+    switch(game.stage) {
         case STAGE_TITLE:
-        display.renderTitle();
         if(jay.justPressed(A_BUTTON) || jay.justPressed(B_BUTTON)) {
             jay.initRandomSeed();
             load();
-            score = 0;
-            loadHighScore();
-            stage = STAGE_PLAY;
+            game.score = 0;
+            game.stage = STAGE_PLAY;
         }
         break;
 
         case STAGE_PLAY:
-        display.renderChrome(score, high_score);
-        display.renderDawgResults(solved_mask);
-        display.renderTime(time_left);
-        display.renderGuess();
-        display.renderCursor();
-        display.renderMessage();
         if(jay.justPressed(LEFT_BUTTON))
             guess.cursorLeft();
         if(jay.justPressed(RIGHT_BUTTON))
@@ -127,62 +83,58 @@ void loop() {
                 display.setMessage("TOO SHORT!");
             } else if (res == -3) {
             } else if (res < 16) {
-                if (!(solved_mask[0] & (1 << res))) {
-                    solved_mask[0] |= (1 << res);
+                if (!(game.solved_mask[0] & (1 << res))) {
+                    game.solved_mask[0] |= (1 << res);
                     solved = 1;
                 } else {
                     display.setMessage("IT'S THERE.");
                 }
             } else {
-                if (!(solved_mask[1] & (1 << (res - 16)))) {
-                    solved_mask[1] |= (1 << (res - 16));
+                if (!(game.solved_mask[1] & (1 << (res - 16)))) {
+                    game.solved_mask[1] |= (1 << (res - 16));
                     solved = 1;
                 } else {
                     display.setMessage("IT'S THERE.");
                 }
             }
             if(solved) {
-                num_solved ++;
+                game.num_solved ++;
                 if(len == 6) {
-                    target_solved = 1;
+                    game.target_solved = 1;
                 }
-                if(num_solved == dawg.results_ptr) {
-                    score += 50;
-                    stage = STAGE_NEXT;
+                if(game.num_solved == dawg.results_ptr) {
+                    game.score += 50;
+                    game.stage = STAGE_NEXT;
                 }
                 display.setMessage(MESSAGES[len - 3]);
-                score += (len - 2) * (len - 2);
-                if (score > high_score) {
-                    high_score = score;
-                    setHighScore();
+                game.score += (len - 2) * (len - 2);
+                if (game.score > game.high_score) {
+                    game.high_score = game.score;
+                    game.setHighScore();
                 }
             }
         }
-        if(time_left == 0) {
-            if(target_solved) {
-                stage = STAGE_NEXT;
+        if(game.time_left == 0) {
+            if(game.target_solved) {
+                game.stage = STAGE_NEXT;
             } else {
-                stage = STAGE_GAME_OVER;
+                game.stage = STAGE_GAME_OVER;
             }
         }
         break;
 
         case STAGE_NEXT:
         case STAGE_GAME_OVER:
-        solved_mask[0] = 0xFFFF;
-        solved_mask[1] = 0xFFFF;
-        display.renderChrome(score, high_score);
-        display.renderDawgResults(solved_mask);
-        if(stage == STAGE_NEXT) {
-            display.renderNext();
+        game.solved_mask[0] = 0xFFFF;
+        game.solved_mask[1] = 0xFFFF;
+        if(game.stage == STAGE_NEXT) {
             if(jay.justPressed(A_BUTTON)) {
                 load();
-                stage = STAGE_PLAY;
+                game.stage = STAGE_PLAY;
             }
         } else {
-            display.renderGameOver();
             if(jay.justPressed(A_BUTTON)) {
-                stage = STAGE_TITLE;
+                game.stage = STAGE_TITLE;
             }
         }
         break;
@@ -192,8 +144,9 @@ void loop() {
     //jay.setCursor(100, 55);
     //jay.smallPrint(itoa(display_buf, jay.cpuLoad()));
 
-    if(time_left > 0) time_left --;
+    if(game.time_left > 0) game.time_left --;
 
+    display.render();
     jay.display();
 }
 

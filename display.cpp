@@ -1,10 +1,33 @@
 #include "display.h"
 
-Display::Display(Jaylib &arg_jay, Dawg &arg_dawg, Guess &arg_guess):
-jay(arg_jay), dawg(arg_dawg), guess(arg_guess){
+Display::Display(Jaylib &arg_jay, Dawg &arg_dawg, Guess &arg_guess, Game &arg_game)
+:jay(arg_jay), dawg(arg_dawg), guess(arg_guess), game(arg_game) {}
+
+int Display::render() {
+    switch(game.stage) {
+        case STAGE_TITLE:
+        renderTitle();
+        break;
+
+        case STAGE_PLAY:
+        renderGuess();
+        renderCursor();
+
+        case STAGE_NEXT:
+        case STAGE_GAME_OVER:
+        if(game.stage == STAGE_GAME_OVER)
+            setMessage("GAME OVER", 1);
+        else if(game.stage == STAGE_NEXT)
+            setMessage("NEXT ROUND!", 1);
+        renderChrome();
+        renderDawgResults();
+        renderTime();
+        renderMessage();
+        break;
+    }
 }
 
-int Display::renderDawgResults(uint16_t *solved_mask) {
+int Display::renderDawgResults() {
     int i, len;
     int num = dawg.results_ptr;
     int col_len, cur_x = 1;
@@ -12,7 +35,7 @@ int Display::renderDawgResults(uint16_t *solved_mask) {
     for(i = 0; i < dawg.results_ptr; i++) {
         len = strlen(dawg.results[i]);
         jay.setCursor(cur_x, 1 + 6 * (i % 10));
-        if ((i < 16) ? (solved_mask[0] & (1 << i)) : (solved_mask[1] & ((1 << (i - 16))))) {
+        if ((i < 16) ? (game.solved_mask[0] & (1 << i)) : (game.solved_mask[1] & ((1 << (i - 16))))) {
             jay.smallPrint(dawg.results[i]);
         } else {
             q[len] = '\0';
@@ -25,7 +48,7 @@ int Display::renderDawgResults(uint16_t *solved_mask) {
     }
 }
 
-int Display::renderChrome(uint32_t cur_score, uint32_t high_score) {
+int Display::renderChrome() {
     char buf[8];
     jay.drawFastVLine(76, 0, 36, 1);
     jay.drawFastHLine(76, 13, 52, 1);
@@ -37,20 +60,20 @@ int Display::renderChrome(uint32_t cur_score, uint32_t high_score) {
     jay.setCursor(78, 1);
     jay.smallPrint("SCORE:");
     jay.setCursor(102, 1);
-    jay.smallPrint(itoa(buf, cur_score));
+    jay.smallPrint(itoa(buf, game.score));
 
     jay.setCursor(78, 7);
     jay.smallPrint(" HIGH:");
     jay.setCursor(102, 7);
-    jay.smallPrint(itoa(buf, high_score));
+    jay.smallPrint(itoa(buf, game.high_score));
 }
 
-int Display::renderTime(uint32_t time_left) {
+int Display::renderTime() {
     char buf[8];
     jay.setCursor(78, 15);
     jay.smallPrint(" TIME:");
     jay.setCursor(102, 15);
-    jay.smallPrint(itoa(buf, time_left / 10));
+    jay.smallPrint(itoa(buf, game.time_left / 10));
 }
 
 int Display::renderTitle() {
@@ -98,8 +121,8 @@ int Display::renderCursor() {
 
 }
 
-int Display::setMessage(char* msg) {
-    messageTTL = 30;
+int Display::setMessage(char* msg, uint32_t arg_messageTTL) {
+    messageTTL = arg_messageTTL;
     message_ptr = msg;
 }
 

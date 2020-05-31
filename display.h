@@ -6,14 +6,17 @@
 #include "utils.h"
 #include "dawg.h"
 #include "guess.h"
+#include "game.h"
 
 class Display {
     public:
-    Display(Jaylib &arg_jay, Dawg &arg_dawg, Guess &arg_guess);
+    Display(Jaylib &arg_jay, Dawg &arg_dawg, Guess &arg_guess, Game &arg_game);
 
-    int renderDawgResults(uint16_t *solved_mask);
-    int renderChrome(uint32_t cur_score, uint32_t high_score);
-    int renderTime(uint32_t time_left);
+    int render();
+
+    int renderDawgResults();
+    int renderChrome();
+    int renderTime();
     int renderGuess();
 
     int renderTitle();
@@ -25,8 +28,9 @@ class Display {
     Jaylib &jay;
     Dawg &dawg;
     Guess &guess;
+    Game &game;
 
-    int setMessage(char* msg);
+    int setMessage(char* msg, uint32_t arg_messageTTL = 30);
     int renderMessage();
     char * message_ptr;
     uint32_t messageTTL;
