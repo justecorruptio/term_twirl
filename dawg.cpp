@@ -1,19 +1,20 @@
 #include "dawg.h"
 
 
-int Dawg::init() {
+Dawg::Dawg() {
     target_count = 0;
-    setup(OP_MODE_SELECT, 0xFF);
-    traverse();
+    process(OP_MODE_SELECT, 0xFF);
 }
 
-int Dawg::setup(int mode, uint32_t param) {
+int Dawg::process(int mode, uint32_t param) {
     op_mode = mode;
     op_param = param;
 
     ((uint32_t *)buffer)[0] = 0;
     ((uint32_t *)buffer)[1] = 0;
     results_ptr = 0;
+
+    traverse();
 }
 
 int Dawg::traverse(uint32_t ptr, int buf_ptr, uint32_t hash) {

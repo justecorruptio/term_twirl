@@ -21,3 +21,4 @@ for line in fh:
 
 for six in sorted(SIXES):
     print six
+#print 'MUUMUU'

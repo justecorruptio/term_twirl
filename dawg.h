@@ -15,10 +15,9 @@ class Dawg {
 
     public:
 
-    int init();
+    Dawg();
 
-    int setup(int mode, uint32_t param);
-
+    int process(int mode, uint32_t param);
     int traverse(uint32_t ptr, int buf_ptr, uint32_t hash);
     int traverse();
 
