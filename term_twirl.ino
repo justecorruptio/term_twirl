@@ -20,21 +20,17 @@ const uint32_t EEPROM_MAGIC = 0xF6E290C4;
 Jaylib jay;
 Dawg dawg;
 Guess guess;
-
 Display display = Display(jay, dawg, guess);
 
 int stage;
-uint32_t counter = 0;
-char display_buf[16];
-
 uint16_t solved_mask[2] = {0, 0};
 uint32_t num_solved = 0;
 char target_solved = 0;
+uint32_t word_hash;
+uint32_t time_left;
+
 uint32_t score = 0;
 uint32_t high_score = 0;
-uint32_t word_hash;
-char word_buf[8];
-uint32_t time_left;
 
 void loadHighScore() {
     uint32_t v;
@@ -82,10 +78,11 @@ void setup() {
     stage = STAGE_TITLE;
 }
 
-
 void loop() {
     int res, len;
     char solved;
+    char word_buf[8];
+
     if(!jay.nextFrame()) return;
 
     jay.pollButtons();
@@ -104,9 +101,8 @@ void loop() {
         break;
 
         case STAGE_PLAY:
-        display.renderChrome();
+        display.renderChrome(score, high_score);
         display.renderDawgResults(solved_mask);
-        display.renderScores(score, high_score);
         display.renderTime(time_left);
         display.renderGuess();
         display.renderCursor();
@@ -172,38 +168,33 @@ void loop() {
         break;
 
         case STAGE_NEXT:
-        solved_mask[0] = 0xFFFF;
-        solved_mask[1] = 0xFFFF;
-        display.renderChrome();
-        display.renderDawgResults(solved_mask);
-        display.renderScores(score, high_score);
-        display.renderNext();
-        if(jay.justPressed(A_BUTTON)) {
-            load();
-            stage = STAGE_PLAY;
-        }
-        break;
-
         case STAGE_GAME_OVER:
         solved_mask[0] = 0xFFFF;
         solved_mask[1] = 0xFFFF;
-        display.renderChrome();
+        display.renderChrome(score, high_score);
         display.renderDawgResults(solved_mask);
-        display.renderScores(score, high_score);
-        display.renderGameOver();
-        if(jay.justPressed(A_BUTTON)) {
-            stage = STAGE_TITLE;
+        if(stage == STAGE_NEXT) {
+            display.renderNext();
+            if(jay.justPressed(A_BUTTON)) {
+                load();
+                stage = STAGE_PLAY;
+            }
+        } else {
+            display.renderGameOver();
+            if(jay.justPressed(A_BUTTON)) {
+                stage = STAGE_TITLE;
+            }
         }
         break;
     }
 
+    //char display_buf[16];
     //jay.setCursor(100, 55);
     //jay.smallPrint(itoa(display_buf, jay.cpuLoad()));
 
-    jay.display();
-    counter ++;
-
     if(time_left > 0) time_left --;
+
+    jay.display();
 }
 
 // vim:syntax=c

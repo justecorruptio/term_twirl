@@ -25,7 +25,8 @@ int Display::renderDawgResults(uint16_t *solved_mask) {
     }
 }
 
-int Display::renderChrome() {
+int Display::renderChrome(uint32_t cur_score, uint32_t high_score) {
+    char buf[8];
     jay.drawFastVLine(76, 0, 36, 1);
     jay.drawFastHLine(76, 13, 52, 1);
     jay.drawFastHLine(76, 36, 52, 1);
@@ -33,10 +34,6 @@ int Display::renderChrome() {
     jay.drawFastVLine(76, 50, 14, 1);
     jay.drawFastHLine(76, 50, 52, 1);
 
-}
-
-int Display::renderScores(uint32_t cur_score, uint32_t high_score) {
-    char buf[8];
     jay.setCursor(78, 1);
     jay.smallPrint("SCORE:");
     jay.setCursor(102, 1);
@@ -81,13 +78,14 @@ int Display::renderGuess() {
 }
 
 int Display::renderCursor() {
-    int i;
+    int i, t;
     guess.cursor_counter ++;
 
     for(i = 0; i < 9; i++){
-        jay.drawPixel(78 + 8 * guess.cursor_pos + i, 52,
+        t = 78 + 8 * guess.cursor_pos + i;
+        jay.drawPixel(t, 52,
             (i - guess.cursor_counter / 4) % 4 == 0);
-        jay.drawPixel(78 + 8 * guess.cursor_pos + i, 62,
+        jay.drawPixel(t, 62,
             (i + guess.cursor_counter / 4 + 2) % 4 == 0);
     }
 

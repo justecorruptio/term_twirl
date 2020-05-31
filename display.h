@@ -12,8 +12,7 @@ class Display {
     Display(Jaylib &arg_jay, Dawg &arg_dawg, Guess &arg_guess);
 
     int renderDawgResults(uint16_t *solved_mask);
-    int renderChrome();
-    int renderScores(uint32_t cur_score, uint32_t high_score);
+    int renderChrome(uint32_t cur_score, uint32_t high_score);
     int renderTime(uint32_t time_left);
     int renderGuess();
 
