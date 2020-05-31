@@ -34,7 +34,7 @@ int Dawg::traverse(uint16_t ptr, int buf_ptr, uint32_t hash) {
 
         if (w.high & 0x1) { // Word End
             if(op_mode == OP_MODE_SELECT) {
-                if((buf_ptr + 1 == TARGET_LENGTH) && (op_param-- == 0)){
+                if((buf_ptr + 1 == TARGET_LENGTH) && (--op_param == 0)){
                     strcpy(results[0], buffer);
                 }
             } else if(op_param % next_hash == 0) {
