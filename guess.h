@@ -12,7 +12,7 @@ class Guess {
     uint8_t guess_mask;
 
     int cursor_pos = 0;
-    int cursor_counter = 0;
+    uint16_t cursor_counter = 0;
 
     int reset(char * input_letters);
     char* getWord(char* buf);

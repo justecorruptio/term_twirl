@@ -88,24 +88,22 @@ int Display::renderGuess() {
 }
 
 int Display::renderCursor() {
-    int i, t;
+    int i, t, a, b;
     guess.cursor_counter ++;
 
-    for(i = 0; i < 9; i++){
+    for(i = 11; i--;){
+        a = (i + guess.cursor_counter / 4) % 4;
+        b = (i - guess.cursor_counter / 4) % 4;
+        t = 78 + 8 * guess.cursor_pos;
+        jay.drawPixel(t, 52 + i, a == 0);
+        jay.drawPixel(t + 8, 52 + i, b == 0);
+
+        if (i >= 9) continue;
+
         t = 78 + 8 * guess.cursor_pos + i;
-        jay.drawPixel(t, 52,
-            (i - guess.cursor_counter / 4) % 4 == 0);
-        jay.drawPixel(t, 62,
-            (i + guess.cursor_counter / 4 + 2) % 4 == 0);
+        jay.drawPixel(t, 52, b == 0);
+        jay.drawPixel(t, 62, a == 2);
     }
-
-    for(i = 0; i < 11; i++){
-        jay.drawPixel(78 + 8 * guess.cursor_pos, 52 + i,
-            (i + guess.cursor_counter / 4) % 4 == 0);
-        jay.drawPixel(86 + 8 * guess.cursor_pos, 52 + i,
-            (i - guess.cursor_counter / 4) % 4 == 0);
-    }
-
 }
 
 int Display::setMessage(char* msg, uint16_t arg_messageTTL) {

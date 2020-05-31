@@ -23,6 +23,7 @@ int Guess::cursorLeft() {
     cursor_pos --;
     if (cursor_pos < 0) cursor_pos = 5;
 }
+
 int Guess::cursorRight() {
     cursor_pos ++;
     if (cursor_pos >= 6) cursor_pos = 0;
