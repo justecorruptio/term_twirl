@@ -82,21 +82,12 @@ void loop() {
             } else if (res == -2) {
                 display.setMessage("TOO SHORT!");
             } else if (res == -3) {
-            } else if (res < 16) {
-                if (!(game.solved_mask[0] & (1 << res))) {
-                    game.solved_mask[0] |= (1 << res);
-                    solved = 1;
-                } else {
-                    display.setMessage("IT'S THERE.");
-                }
+            } else if(!game.checkSolved(res, 1)) {
+                solved = 1;
             } else {
-                if (!(game.solved_mask[1] & (1 << (res - 16)))) {
-                    game.solved_mask[1] |= (1 << (res - 16));
-                    solved = 1;
-                } else {
-                    display.setMessage("IT'S THERE.");
-                }
+                display.setMessage("IT'S THERE.");
             }
+
             if(solved) {
                 game.num_solved ++;
                 if(len == 6) {
@@ -127,13 +118,11 @@ void loop() {
         case STAGE_GAME_OVER:
         game.solved_mask[0] = 0xFFFF;
         game.solved_mask[1] = 0xFFFF;
-        if(game.stage == STAGE_NEXT) {
-            if(jay.justPressed(A_BUTTON)) {
+        if(jay.justPressed(A_BUTTON)) {
+            if(game.stage == STAGE_NEXT) {
                 load();
                 game.stage = STAGE_PLAY;
-            }
-        } else {
-            if(jay.justPressed(A_BUTTON)) {
+            } else {
                 game.stage = STAGE_TITLE;
             }
         }

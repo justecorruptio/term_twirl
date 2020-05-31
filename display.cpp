@@ -35,7 +35,7 @@ int Display::renderDawgResults() {
     for(i = 0; i < dawg.results_ptr; i++) {
         len = strlen(dawg.results[i]);
         jay.setCursor(cur_x, 1 + 6 * (i % 10));
-        if ((i < 16) ? (game.solved_mask[0] & (1 << i)) : (game.solved_mask[1] & ((1 << (i - 16))))) {
+        if(game.checkSolved(i, 0)) {
             jay.smallPrint(dawg.results[i]);
         } else {
             q[len] = '\0';

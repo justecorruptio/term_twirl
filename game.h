@@ -13,6 +13,7 @@ class Game {
     public:
 
     int reset();
+    int checkSolved(int index, char setIfUnset);
 
     int stage;
     uint16_t solved_mask[2] = {0, 0};
