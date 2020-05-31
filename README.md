@@ -19,6 +19,8 @@ You can also tweak and rebuild the compressed dictionary with:
 We first find the most common 6-letter English words via a corpus. Based on that, look for all possible valid words
 that *can* show up in a game with these 6-letter words as the target. Compress the resulting set of words into a DAWG.
 
+Since we do not have 2^16 nodes (2^13 covers us), we have 4 wasted bits of storage every 3 bytes. (17% waste)
+
 When loading a new level, the DAWG is traversed once to pick a random 6-letter word, and then again to find all the
 words that are subanagrams of that 6-letter word.
 
