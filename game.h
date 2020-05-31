@@ -17,15 +17,15 @@ class Game {
 
     int stage = STAGE_TITLE;
     uint16_t solved_mask[2] = {0, 0};
-    uint32_t num_solved = 0;
+    char num_solved = 0;
     char target_solved = 0;
-    uint32_t time_left;
+    uint16_t time_left;
 
     void loadHighScore();
     void setHighScore();
 
-    uint32_t score = 0;
-    uint32_t high_score = 0;
+    uint16_t score = 0;
+    uint16_t high_score = 0;
 
 };
 

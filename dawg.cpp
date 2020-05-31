@@ -17,7 +17,7 @@ int Dawg::process(int mode, uint32_t param) {
     traverse();
 }
 
-int Dawg::traverse(uint32_t ptr, int buf_ptr, uint32_t hash) {
+int Dawg::traverse(uint16_t ptr, int buf_ptr, uint32_t hash) {
     union {
         uint32_t whole;
         struct {

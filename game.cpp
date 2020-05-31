@@ -1,6 +1,6 @@
 #include "game.h"
 
-const uint32_t EEPROM_MAGIC = 0xF6E290C4;
+const uint16_t EEPROM_MAGIC = 0x90C4;
 
 int Game::reset() {
     solved_mask[0] = 0;
@@ -28,7 +28,7 @@ int Game::checkSolved(int index, char setIfUnset) {
 }
 
 void Game::loadHighScore() {
-    uint32_t v;
+    uint16_t v;
     EEPROM.get(256, v);
     if(v != EEPROM_MAGIC) {
         EEPROM.put(256, EEPROM_MAGIC);

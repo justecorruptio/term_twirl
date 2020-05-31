@@ -121,7 +121,7 @@ int Display::renderCursor() {
 
 }
 
-int Display::setMessage(char* msg, uint32_t arg_messageTTL) {
+int Display::setMessage(char* msg, uint16_t arg_messageTTL) {
     messageTTL = arg_messageTTL;
     message_ptr = msg;
 }

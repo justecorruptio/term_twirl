@@ -11,5 +11,5 @@ for i, item in enumerate(text):
         print
 
 print '0x00 };'
-print 'const uint32_t DICT_DAWG_LENGTH = %s;' % (len(data),)
+print 'const uint16_t DICT_DAWG_LENGTH = %s;' % (len(data),)
 print '#endif'

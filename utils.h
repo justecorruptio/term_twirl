@@ -9,7 +9,7 @@ const uint8_t LETTER_TO_PRIME_BY_FREQ [] = {
 };
 
 void reverse(char * buf, uint8_t len);
-char * itoa(char * buf, int32_t x);
+char * itoa(char * buf, int16_t x);
 uint32_t lex_hash(char * buf);
 
 #endif

@@ -9,7 +9,7 @@ void reverse(char * buf, uint8_t len) {
     }
 }
 
-char * itoa(char * buf, int32_t x) {
+char * itoa(char * buf, int16_t x) {
     uint8_t i;
     if(x == 0) {
         buf[0] = '0', buf[1] = '\0';
