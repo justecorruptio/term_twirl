@@ -30,7 +30,7 @@ class Display {
     Guess &guess;
     Game &game;
 
-    int setMessage(char* msg, uint16_t arg_messageTTL = 30);
+    int setMessage(char* msg, uint16_t arg_messageTTL = 50);
     int renderMessage();
     char * message_ptr;
     uint16_t messageTTL;

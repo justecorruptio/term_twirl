@@ -22,49 +22,35 @@ int Dawg::traverse(uint16_t ptr, int buf_ptr, uint32_t hash) {
             char high;
         };
     } w;
-    char c;
-    uint32_t next_hash = hash;
+    uint32_t next_hash;
 
     do {
         w.whole = pgm_read_dword(DICT_DAWG + ptr);
 
         // Though the DAWG spec allows the character to be '\0',
         // it never is base on how the dawg is generated.
-        c = (w.high >> 2) + 'A' - 1;
-        next_hash = hash * (LETTER_TO_PRIME_BY_FREQ - 'A')[c];
-        buffer[buf_ptr] = c;
+        buffer[buf_ptr] = (w.high >> 2) + 'A' - 1;
+        next_hash = hash * (LETTER_TO_PRIME_BY_FREQ - 'A')[buffer[buf_ptr]];
 
         if (w.high & 0x1) { // Word End
-            switch (op_mode) {
-                case OP_MODE_SELECT:
-                if(buf_ptr + 1 == TARGET_LENGTH) {
-                    if (++counter == op_param){
-                        strcpy(results[0], buffer);
-                        return 0;
-                    }
+            if(op_mode == OP_MODE_SELECT) {
+                if((buf_ptr + 1 == TARGET_LENGTH) && (++counter == op_param)){
+                    strcpy(results[0], buffer);
                 }
-                break;
-
-                case OP_MODE_LOAD:
+            } else if(op_param % next_hash == 0) {
                 // This should never overflow since the generator
                 // script doesn't allow more than 30 subanagrams.
-                if(op_param % next_hash == 0)
-                    strcpy(results[results_ptr ++], buffer);
-                break;
-
+                strcpy(results[results_ptr ++], buffer);
             }
         }
 
-        if (w.child_offset) {
-            if(! traverse(w.child_offset * 3, buf_ptr + 1, next_hash))
-                return 0;
-        }
+        if (w.child_offset)
+            traverse(w.child_offset * 3, buf_ptr + 1, next_hash);
 
         ptr += 3;
     } while (! (w.high & 0x2)); // List End
 
     buffer[buf_ptr] = 0;
-    return 1;
 }
 
 int Dawg::traverse() {
