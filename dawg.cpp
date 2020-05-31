@@ -1,11 +1,6 @@
 #include "dawg.h"
 
 
-Dawg::Dawg() {
-    target_count = 0;
-    process(OP_MODE_SELECT, 0xFFFF);
-}
-
 int Dawg::process(int mode, uint32_t param) {
     op_mode = mode;
     op_param = param;
@@ -13,7 +8,8 @@ int Dawg::process(int mode, uint32_t param) {
     ((uint32_t *)buffer)[0] = 0;
     ((uint32_t *)buffer)[1] = 0;
     results_ptr = 0;
-
+    if(mode == OP_MODE_SELECT)
+        op_param = random(1, DICT_DAWG_NUM_TARGETS - 1);
     traverse();
 }
 
@@ -32,21 +28,17 @@ int Dawg::traverse(uint16_t ptr, int buf_ptr, uint32_t hash) {
     do {
         w.whole = pgm_read_dword(DICT_DAWG + ptr);
 
-        // current character
-        if (w.high & 0x7C) {
-            c = (w.high >> 2) - 1;
-            next_hash = hash * LETTER_TO_PRIME_BY_FREQ[c];
-            buffer[buf_ptr] = c + 'A';
-        }
+        // Though the DAWG spec allows the character to be '\0',
+        // it never is base on how the dawg is generated.
+        c = (w.high >> 2) + 'A' - 1;
+        next_hash = hash * (LETTER_TO_PRIME_BY_FREQ - 'A')[c];
+        buffer[buf_ptr] = c;
 
         if (w.high & 0x1) { // Word End
             switch (op_mode) {
                 case OP_MODE_SELECT:
                 if(buf_ptr + 1 == TARGET_LENGTH) {
-                    counter += 1;
-                    if(op_param == 0xFFFF) {
-                        target_count = counter;
-                    } else if (counter == op_param){
+                    if (++counter == op_param){
                         strcpy(results[0], buffer);
                         return 0;
                     }
@@ -54,9 +46,10 @@ int Dawg::traverse(uint16_t ptr, int buf_ptr, uint32_t hash) {
                 break;
 
                 case OP_MODE_LOAD:
-                if(op_param % next_hash == 0) {
+                // This should never overflow since the generator
+                // script doesn't allow more than 30 subanagrams.
+                if(op_param % next_hash == 0)
                     strcpy(results[results_ptr ++], buffer);
-                }
                 break;
 
             }

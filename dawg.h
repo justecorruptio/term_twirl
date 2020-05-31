@@ -12,10 +12,7 @@
 #define OP_MODE_LOAD 2
 
 class Dawg {
-
     public:
-
-    Dawg();
 
     int process(int mode, uint32_t param);
     int traverse(uint16_t ptr, int buf_ptr, uint32_t hash);
@@ -32,7 +29,6 @@ class Dawg {
     int op_mode;
     uint32_t op_param;
     int counter;
-    int target_count;
 };
 
 #endif

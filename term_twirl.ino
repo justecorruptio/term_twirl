@@ -22,7 +22,7 @@ void load() {
     uint32_t word_hash;
 
     jay.initRandomSeed();
-    dawg.process(OP_MODE_SELECT, random(1, dawg.target_count - 1));
+    dawg.process(OP_MODE_SELECT, 0);
     word_hash = lex_hash(dawg.results[0]);
 
     guess.reset(dawg.results[0]);

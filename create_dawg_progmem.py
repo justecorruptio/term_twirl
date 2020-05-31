@@ -12,4 +12,12 @@ for i, item in enumerate(text):
 
 print '0x00 };'
 print 'const uint16_t DICT_DAWG_LENGTH = %s;' % (len(data),)
+
+fh = open('output.txt', 'r')
+count = 0
+for line in fh:
+    if len(line.strip()) == 6:
+        count += 1
+print 'const uint16_t DICT_DAWG_NUM_TARGETS = %s;' % (count,)
+
 print '#endif'
