@@ -29,21 +29,19 @@ int Display::render() {
 
 int Display::renderDawgResults() {
     int i, len;
-    int num = dawg.results_ptr;
-    int col_len, cur_x = 1;
+    int cur_x = 1, cur_y;
     char q[8] = "???????";
     for(i = 0; i < dawg.results_ptr; i++) {
         len = strlen(dawg.results[i]);
-        if(game.checkSolved(i, 0)) {
-            jay.smallPrint(cur_x, 1 + 6 * (i % 10), dawg.results[i]);
-        } else {
-            q[len] = '\0';
-            jay.smallPrint(cur_x, 1 + 6 * (i % 10), q);
-            q[len] = '?';
-        }
-        if ((i % 10 == 9) && (i < dawg.results_ptr - 1)) {
+        cur_y = 1 + 6 * (i % 10);
+        q[len] = '\0';
+        if(game.checkSolved(i, 0))
+            jay.smallPrint(cur_x, cur_y, dawg.results[i]);
+        else
+            jay.smallPrint(cur_x, cur_y, q);
+        q[len] = '?';
+        if ((i % 10 == 9) && (i < dawg.results_ptr - 1))
             cur_x += 4 * len + 5;
-        }
     }
 }
 
@@ -77,10 +75,12 @@ int Display::renderTitle() {
 
 int Display::renderGuess() {
     int i;
-    char buf[8] = "\0\0\0\0\0\0\0\0";
+    char buf[8];
 
     for(i = 0; guess.letters[i]; i++)
         buf[i] = guess.guess_mask & (1 << i) ?  ' ' : guess.letters[i];
+
+    buf[i] = '\0';
 
     // Order matters here as getWord mutates buf
     jay.largePrint(80, 54, buf, 3);
