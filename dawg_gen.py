@@ -11,12 +11,10 @@ from time import clock
 
 ######################## Read/check word list ###############################
 
-print
-if len(argv) != 2:
-    print "Usage: dawg_gen.py [word list path]"
-    exit(1)
 filename = argv[1]
+inp = argv[2]
 time = clock()
+
 print "Checking word list...", 
 try:
     wordlist = open(filename).read().split()
@@ -29,7 +27,6 @@ if not all(all(c.isupper() for c in w) for w in wordlist) or any(b < a for a,b i
     exit(1) 
 print "OK".ljust(13),
 
-  
 print "finished in {:.4} seconds.".format(clock()-time)
 
 ######################## Build Trie #########################################
@@ -188,33 +185,6 @@ print
 
 ################## export as bitpacked array binaries #########################
 
-def prompt_filename():
-    while True:
-        inp = raw_input("Enter export path: ")
-        if os.path.exists(inp):
-            while True:
-                choice = raw_input("File already exists. Overwrite? ")
-                if choice in ('y', 'Y'): return inp
-                if choice in ('n', 'N'): break
-        else:
-            return inp
-
-
-def prompt_packing_mode():
-    ok_3b = len(array) <= 2**17
-    ok_4b = len(array) <= 2**22
-    while True:
-        print
-        print "Choose node size:"
-        print "    (3) bytes" + " -> UNAVAILABLE: number of nodes above 2**17-1 or 131071"*(not ok_3b)
-        print "    (4) bytes" + " -> UNAVAILABLE: number of nodes above 2**22-1 or 4194303"*(not ok_4b)
-        print
-        mode = raw_input("> ")
-        if mode in ok_3b*"3" + ok_4b*"4":
-            return mode
-
-
-inp = "output.dawg"
 mode = "3"
 
 t = clock()

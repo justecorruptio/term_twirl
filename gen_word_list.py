@@ -14,7 +14,7 @@ def hx(letters):
         r *= LETTERS_TO_PRIMES[c]
     return r
 
-fh = open('easy.txt', 'r')
+fh = open('sixes.txt', 'r')
 
 sixes = {}
 

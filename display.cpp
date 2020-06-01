@@ -68,9 +68,19 @@ int Display::renderTime() {
 }
 
 int Display::renderTitle() {
+    int a;
     jay.largePrint(33, 20, "TERM TWIRL");
     jay.drawFastHLine(33, 28, 59, 1);
     jay.drawFastHLine(37, 30, 51, 1);
+
+    jay.smallPrint(46, 34, "EASY MODE");
+    jay.smallPrint(46, 40, "HARD MODE");
+
+    cursor_counter ++;
+    jay.smallPrint(
+        38 + (cursor_counter % 12) / 3,
+        34 + 6 * !dawg.easy_mode, ">"
+    );
 }
 
 int Display::renderGuess() {
@@ -89,11 +99,11 @@ int Display::renderGuess() {
 
 int Display::renderCursor() {
     int i, t, a, b;
-    guess.cursor_counter ++;
+    cursor_counter ++;
 
     for(i = 11; i--;){
-        a = (i + guess.cursor_counter / 4) % 4;
-        b = (i - guess.cursor_counter / 4) % 4;
+        a = (i + cursor_counter / 4) % 4;
+        b = (i - cursor_counter / 4) % 4;
         t = 78 + 8 * guess.cursor_pos;
         jay.drawPixel(t, 52 + i, a == 0);
         jay.drawPixel(t + 8, 52 + i, b == 0);

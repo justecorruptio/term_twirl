@@ -6,7 +6,6 @@ int Guess::reset(char * input_letters) {
     guess_mask = 0x0;
     guess_ptr = 0;
     guess[0] = '\0';
-    cursor_counter = 0;
 
     handleReturnShuffle();
 }

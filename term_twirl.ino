@@ -58,6 +58,8 @@ void loop() {
             game.score = 0;
             game.stage = STAGE_PLAY;
         }
+        if(jay.justPressed(UP_BUTTON) || jay.justPressed(DOWN_BUTTON))
+            dawg.easy_mode ^= 1;
         break;
 
         case STAGE_PLAY:

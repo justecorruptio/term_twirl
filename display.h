@@ -31,6 +31,8 @@ class Display {
     int renderMessage();
     char * message_ptr;
     uint16_t messageTTL;
+
+    uint16_t cursor_counter = 0;
 };
 
 #endif

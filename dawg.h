@@ -2,7 +2,8 @@
 #define DAWG_H
 
 #include <Arduboy2.h>
-#include "dict_dawg.h"
+#include "dict_dawg_easy.h"
+#include "dict_dawg_hard.h"
 
 #include "utils.h"
 
@@ -27,6 +28,9 @@ class Dawg {
     char buffer[8];
     int op_mode;
     uint32_t op_param;
+
+    char easy_mode = 1;
+    uint8_t * dict_dawg;
 };
 
 #endif

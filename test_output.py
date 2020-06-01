@@ -1,3 +1,5 @@
+from sys import argv
+
 LETTERS = 'ETAOINSHRDLUFCMGYPWBVKXJQZ'
 PRIMES = [
     2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41,
@@ -16,7 +18,7 @@ hashes = []
 
 count_sixes = 0
 
-fh = open('output.txt', 'r')
+fh = open(argv[1], 'r')
 for line in fh:
     word = line.strip()
     h = hx(word)
@@ -25,6 +27,7 @@ for line in fh:
     if len(word) == 6:
         count_sixes += 1
 
+print 'FILE:', argv[1]
 print 'MAX_HASH:', max(hashes)
 print 'SIXES:', count_sixes
 
