@@ -1,13 +1,19 @@
-CUTOFF = 30000
+CUTOFF = 15000
 
 raw_easy = set()
 
 fh = open('count_1w.txt', 'r')
 for i, line in enumerate(fh):
     word, _ = line.split('\t')
-    if i < CUTOFF:
+    if len(word) == 6 and i < CUTOFF:
         raw_easy.add(word.upper())
 fh.close()
+
+for i in xrange(3, 6):
+    fh = open('list_easy_%s.txt' % (i,), 'r')
+    for i, line in enumerate(fh):
+        raw_easy.add(line.strip())
+    fh.close()
 
 fh = open('output.txt', 'r')
 

@@ -21,7 +21,7 @@ for line in fh:
     if len(SIXES) >= N:
         break
 
-M = 3600
+M = 3800
 postfixes = Counter()
 for six in SIXES:
     for i in xrange(0, 2):
