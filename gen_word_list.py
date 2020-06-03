@@ -14,7 +14,7 @@ def hx(letters):
         r *= LETTERS_TO_PRIMES[c]
     return r
 
-fh = open('sixes.txt', 'r')
+fh = open('generated_data/sixes.txt', 'r')
 
 sixes = {}
 
@@ -25,7 +25,7 @@ for line in fh:
 
 fh.close()
 
-fh = open('twl.txt', 'r')
+fh = open('input_data/twl.txt', 'r')
 
 words = []
 

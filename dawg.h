@@ -2,8 +2,8 @@
 #define DAWG_H
 
 #include <Arduboy2.h>
-#include "dict_dawg_easy.h"
-#include "dict_dawg_hard.h"
+#include "generated_data/dict_dawg_easy.h"
+#include "generated_data/dict_dawg_hard.h"
 
 #include "utils.h"
 

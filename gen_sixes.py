@@ -1,7 +1,7 @@
 from collections import Counter
 import re
 
-fh = open('twl.txt', 'r')
+fh = open('input_data/twl.txt', 'r')
 ALL_WORDS = set()
 for line in fh:
     line = line.strip()
@@ -12,7 +12,7 @@ fh.close()
 N = 10000
 
 SIXES = []
-fh = open('count_1w.txt', 'r')
+fh = open('input_data/count_1w.txt', 'r')
 for line in fh:
     word, _ = line.split()
     word = word.upper()
