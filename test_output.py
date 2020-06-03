@@ -28,7 +28,7 @@ for line in fh:
         count_sixes += 1
 
 print 'FILE:', argv[1]
-print 'MAX_HASH:', max(hashes)
+print 'MAX_HASH:', max(hashes or [0])
 print 'SIXES:', count_sixes
 
 #freqs = [None] * 26

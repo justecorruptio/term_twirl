@@ -69,7 +69,7 @@ node_dict = {}
 for x in trie:
     hash_str = "".join((str(x.is_end), x.val, "".join(y.hash for y in x.children)))
     x.hash = hashlib.md5(hash_str).digest()
-    if x.hash not in node_dict: 
+    if x.hash not in node_dict:
         node_dict[x.hash] = x
         for i,y in enumerate(x.children):
             x.children[i] = node_dict[y.hash]

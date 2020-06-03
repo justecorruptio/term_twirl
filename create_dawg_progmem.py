@@ -15,7 +15,7 @@ for i, item in enumerate(text):
         print
 
 print '0x00 };'
-print 'const uint16_t DICT_DAWG_%s_START_PTR = 0x%04X;' % (
+print '#define DICT_DAWG_%s_START_PTR 0x%04X' % (
     diff.upper(),
     ord(data[-3]) | (ord(data[-2]) << 8),
 )
@@ -26,7 +26,7 @@ for line in fh:
     if len(line.strip()) == 6:
         count += 1
 
-print 'const uint16_t DICT_DAWG_%s_NUM_TARGETS = %s;' % (
+print '#define DICT_DAWG_%s_NUM_TARGETS %s' % (
     diff.upper(),
     count,
 )
