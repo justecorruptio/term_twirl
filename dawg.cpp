@@ -1,5 +1,18 @@
 #include "dawg.h"
 
+const uint8_t * DICT_DAWG [] = {
+    DICT_DAWG_EASY,
+    DICT_DAWG_HARD
+};
+const uint16_t DICT_DAWG_START_PTR [] = {
+    DICT_DAWG_EASY_START_PTR,
+    DICT_DAWG_HARD_START_PTR
+};
+const uint16_t DICT_DAWG_NUM_TARGETS [] = {
+    DICT_DAWG_EASY_NUM_TARGETS,
+    DICT_DAWG_HARD_NUM_TARGETS
+};
+
 
 int Dawg::process(int mode, uint32_t param) {
     op_mode = mode;
@@ -9,21 +22,21 @@ int Dawg::process(int mode, uint32_t param) {
     results_ptr = 0;
     if(mode == OP_MODE_SELECT) {
         if (easy_mode)
-            op_param = random(1, DICT_DAWG_EASY_NUM_TARGETS - 1);
+            op_param = random(1, DICT_DAWG_NUM_TARGETS[0] - 1);
         else
             op_param = random(1,
-                DICT_DAWG_EASY_NUM_TARGETS + DICT_DAWG_HARD_NUM_TARGETS - 1
+                DICT_DAWG_NUM_TARGETS[0] + DICT_DAWG_NUM_TARGETS[1] - 1
             );
     }else{
         op_param = param;
     }
-    dict_dawg = DICT_DAWG_EASY;
-    traverse(DICT_DAWG_EASY_START_PTR * 3);
+    dict_dawg = DICT_DAWG[0];
+    traverse(DICT_DAWG_START_PTR[0] * 3);
 
     if(easy_mode) return;
 
-    dict_dawg = DICT_DAWG_HARD;
-    traverse(DICT_DAWG_HARD_START_PTR * 3);
+    dict_dawg = DICT_DAWG[1];
+    traverse(DICT_DAWG_START_PTR[1] * 3);
 }
 
 int Dawg::traverse(uint16_t ptr, int buf_ptr, uint32_t hash) {

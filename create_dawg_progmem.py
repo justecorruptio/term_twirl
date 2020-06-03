@@ -15,6 +15,7 @@ for i, item in enumerate(text):
         print
 
 print '0x00 };'
+
 print '#define DICT_DAWG_%s_START_PTR 0x%04X' % (
     diff.upper(),
     ord(data[-3]) | (ord(data[-2]) << 8),
