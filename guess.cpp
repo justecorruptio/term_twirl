@@ -6,16 +6,9 @@ int Guess::reset(char * input_letters) {
     guess_mask = 0x0;
     guess_ptr = 0;
     guess[0] = '\0';
+    guess_word[0] = '\0';
 
     handleReturnShuffle();
-}
-
-char* Guess::getWord(char* buf) {
-    int i;
-    for(i = 0; i < guess_ptr; i++)
-        buf[i] = letters[guess[i]];
-    buf[i] = '\0';
-    return buf;
 }
 
 int Guess::cursorLeft() {
@@ -32,15 +25,18 @@ int Guess::handleSelect() {
     if(guess_mask & (1 << cursor_pos) || guess_ptr >= 6)
         return;
 
-    guess[guess_ptr ++] = cursor_pos;
+    guess_word[guess_ptr] = letters[cursor_pos];
+    guess[guess_ptr] = cursor_pos;
+
+    guess_word[++ guess_ptr] = '\0';
     guess_mask |= (1 << cursor_pos);
 }
 
 int Guess::handleDelete() {
     if (guess_ptr <= 0)
         return;
-
-    guess_mask &= ~(1 << guess[-- guess_ptr]);
+    guess_word[-- guess_ptr] = '\0';
+    guess_mask &= ~(1 << guess[guess_ptr]);
 }
 
 int Guess::handleReturnShuffle() {

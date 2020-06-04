@@ -43,7 +43,6 @@ void setup() {
 
 void loop() {
     int res, len;
-    char word_buf[8];
     char solved = 0;
 
     if(!jay.nextFrame()) return;
@@ -69,8 +68,8 @@ void loop() {
         if(jay.justPressed(DOWN_BUTTON))  guess.handleDelete();
         if(jay.justPressed(B_BUTTON))     guess.handleReturnShuffle();
         if(jay.justPressed(A_BUTTON)) {
-            res = dawg.checkWord(guess.getWord(word_buf));
-            len = strlen(word_buf);
+            res = dawg.checkWord(guess.guess_word);
+            len = strlen(guess.guess_word);
             if((res >= 0) && (solved = !game.checkSolved(res, 1))) {
                 game.num_solved ++;
                 if(len == 6) {

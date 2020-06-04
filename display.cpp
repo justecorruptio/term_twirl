@@ -87,9 +87,8 @@ int Display::renderGuess() {
 
     buf[i] = '\0';
 
-    // Order matters here as getWord mutates buf
     jay.largePrint(80, 54, buf, 3);
-    jay.largePrint(80, 40, guess.getWord(buf), 3);
+    jay.largePrint(80, 40, guess.guess_word, 3);
 }
 
 int Display::renderCursor() {
