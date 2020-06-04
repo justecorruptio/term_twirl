@@ -2,19 +2,23 @@
 
 const uint8_t * DICT_DAWG [] = {
     DICT_DAWG_EASY,
-    DICT_DAWG_HARD
+    DICT_DAWG_HARD,
+    DICT_DAWG_MORE,
 };
 const uint8_t * DICT_DAWG_CHARS [] = {
     DICT_DAWG_EASY_CHARS,
-    DICT_DAWG_HARD_CHARS
+    DICT_DAWG_HARD_CHARS,
+    DICT_DAWG_MORE_CHARS,
 };
 const uint16_t DICT_DAWG_START_PTR [] = {
     DICT_DAWG_EASY_START_PTR,
-    DICT_DAWG_HARD_START_PTR
+    DICT_DAWG_HARD_START_PTR,
+    DICT_DAWG_MORE_START_PTR,
 };
 const uint16_t DICT_DAWG_NUM_TARGETS [] = {
     DICT_DAWG_EASY_NUM_TARGETS,
-    DICT_DAWG_HARD_NUM_TARGETS
+    DICT_DAWG_HARD_NUM_TARGETS,
+    DICT_DAWG_MORE_NUM_TARGETS,
 };
 
 
@@ -29,7 +33,10 @@ int Dawg::process(int mode, uint32_t param) {
             op_param = random(1, DICT_DAWG_NUM_TARGETS[0] - 1);
         else
             op_param = random(1,
-                DICT_DAWG_NUM_TARGETS[0] + DICT_DAWG_NUM_TARGETS[1] - 1
+                DICT_DAWG_NUM_TARGETS[0] +
+                DICT_DAWG_NUM_TARGETS[1] +
+                DICT_DAWG_NUM_TARGETS[2] +
+                - 1
             );
     }else{
         op_param = param;
@@ -43,6 +50,10 @@ int Dawg::process(int mode, uint32_t param) {
     dict_dawg = DICT_DAWG[1];
     dict_dawg_chars = DICT_DAWG_CHARS[1];
     traverse(DICT_DAWG_START_PTR[1]);
+
+    dict_dawg = DICT_DAWG[2];
+    dict_dawg_chars = DICT_DAWG_CHARS[2];
+    traverse(DICT_DAWG_START_PTR[2]);
 }
 
 int Dawg::traverse(uint16_t ptr, int buf_ptr, uint32_t hash) {

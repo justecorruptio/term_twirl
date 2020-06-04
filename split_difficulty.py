@@ -34,6 +34,11 @@ for word in sorted(easy_words):
 fh.close()
 
 fh = open('generated_data/hard.txt', 'w')
-for word in sorted(hard_words):
+for word in sorted(hard_words[:len(hard_words) / 2]):
+    fh.write(word + '\n')
+fh.close()
+
+fh = open('generated_data/more.txt', 'w')
+for word in sorted(hard_words[len(hard_words) / 2:]):
     fh.write(word + '\n')
 fh.close()
