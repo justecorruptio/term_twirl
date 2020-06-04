@@ -41,41 +41,21 @@ int Dawg::process(int mode, uint32_t param) {
     }else{
         op_param = param;
     }
-    dict_dawg = DICT_DAWG[0];
-    dict_dawg_chars = DICT_DAWG_CHARS[0];
-    traverse(DICT_DAWG_START_PTR[0]);
 
+    traverse(DICT_DAWG_START_PTR[0], 0);
     if(easy_mode) return;
-
-    dict_dawg = DICT_DAWG[1];
-    dict_dawg_chars = DICT_DAWG_CHARS[1];
-    traverse(DICT_DAWG_START_PTR[1]);
-
-    dict_dawg = DICT_DAWG[2];
-    dict_dawg_chars = DICT_DAWG_CHARS[2];
-    traverse(DICT_DAWG_START_PTR[2]);
+    traverse(DICT_DAWG_START_PTR[1], 1);
+    traverse(DICT_DAWG_START_PTR[2], 2);
 }
 
-int Dawg::traverse(uint16_t ptr, int buf_ptr, uint32_t hash) {
+int Dawg::traverse(uint16_t ptr, int dict_ptr, int buf_ptr, uint32_t hash) {
     uint16_t child_offset; // IMPORTANT! Never more that 2 ^ 16 nodes
     char high;
     uint32_t next_hash;
-    uint16_t a, b, c;
+    uint16_t addr;
 
     do {
-        //child_offset = pgm_read_word(dict_dawg + ptr * 2);
-        if ((ptr % 4) == 3) {
-            a = pgm_read_word(dict_dawg + (ptr / 4) * 3 * 2 + 0);
-            b = pgm_read_word(dict_dawg + (ptr / 4) * 3 * 2 + 2);
-            c = pgm_read_word(dict_dawg + (ptr / 4) * 3 * 2 + 4);
-            child_offset = (
-                ((a >> 12) & 0x000F) | ((b >> 8) & 0x00F0) | ((c >> 4) & 0x0F00)
-            );
-        } else {
-            child_offset = pgm_read_word(dict_dawg + ((ptr / 4) * 3 + (ptr % 4)) * 2) & 0x0FFF;
-        }
-
-        high = pgm_read_byte(dict_dawg_chars + ptr);
+        high = pgm_read_byte(DICT_DAWG_CHARS[dict_ptr] + ptr);
 
         // Though the DAWG spec allows the character to be '\0',
         // it never is base on how the dawg is generated.
@@ -94,8 +74,19 @@ int Dawg::traverse(uint16_t ptr, int buf_ptr, uint32_t hash) {
             }
         }
 
+        addr = DICT_DAWG[dict_ptr] + (ptr / 4) * 3 * 2;
+        if (ptr % 4 == 3) {
+            child_offset = (
+                ((pgm_read_byte(addr + 1) >> 4) & 0x000F) |
+                ((pgm_read_byte(addr + 3) >> 0) & 0x00F0) |
+                ((pgm_read_byte(addr + 5) << 4) & 0x0F00)
+            );
+        } else {
+            child_offset = pgm_read_word(addr + (ptr % 4) * 2) & 0x0FFF;
+        }
+
         if (child_offset)
-            traverse(child_offset, buf_ptr + 1, next_hash);
+            traverse(child_offset, dict_ptr, buf_ptr + 1, next_hash);
 
         ptr ++;
     } while (! (high & 0x2)); // List End
