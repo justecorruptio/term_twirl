@@ -3,7 +3,7 @@
 
 void Jaylib::drawBand(int x, int y, const uint8_t * sprite, uint8_t cols) {
     uint16_t s;
-    int p = (y >> 3) * WIDTH + cols + x;
+    int p = (y >> 3) * WIDTH + cols + x - 1;
 
     for(; cols --; p --) {
         s = pgm_read_byte(sprite + cols) << (y & 0x7);
