@@ -109,8 +109,7 @@ void loop() {
         break;
     }
 
-    //char display_buf[16];
-    //jay.smallPrint(100, 55, itoa(display_buf, jay.cpuLoad()));
+    //jay.smallPrint(100, 21, itoa(jay.cpuLoad()));
 
     display.render();
     jay.display();
