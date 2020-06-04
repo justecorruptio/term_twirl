@@ -70,11 +70,12 @@ void loop() {
         if(jay.justPressed(A_BUTTON)) {
             res = dawg.checkWord(guess.guess_word);
             len = strlen(guess.guess_word);
-            if((res >= 0) && (solved = !game.checkSolved(res, 1))) {
+            if(len == 0) res = -3;
+            else if(len < 3) res = -2;
+            else if((res > -1) && (solved = !game.checkSolved(res, 1))) {
                 game.num_solved ++;
-                if(len == 6) {
+                if(len == 6)
                     game.target_solved = 1;
-                }
                 if(game.num_solved == dawg.results_ptr) {
                     game.score += 50;
                     game.stage = STAGE_NEXT;
