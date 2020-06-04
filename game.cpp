@@ -9,21 +9,19 @@ int Game::reset() {
 }
 
 int Game::checkSolved(int index, char setIfUnset) {
-    int solved_ptr = 0;
+    int solved_ptr;
     uint16_t mask;
 
-    if (index >= 16) {
-        solved_ptr = 1;
-        index -= 16;
-    }
+    solved_ptr = index / 16;
+    mask = 1 << (index % 16);
 
-    mask = 1 << index;
-    if (!(solved_mask[solved_ptr] & mask)) {
-        if (setIfUnset)
-            solved_mask[solved_ptr] |= mask;
-        return 0;
-    }
-    return 1;
+    if (solved_mask[solved_ptr] & mask)
+        return 1;
+
+    if (setIfUnset)
+        solved_mask[solved_ptr] |= mask;
+
+    return 0;
 }
 
 void Game::highScore() {
