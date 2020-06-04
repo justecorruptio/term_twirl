@@ -30,17 +30,14 @@ int Display::render() {
 int Display::renderDawgResults() {
     int i, len;
     int cur_x = 1, cur_y;
-    char q[8] = "???????";
     for(i = 0; i < dawg.results_ptr; i++) {
         len = strlen(dawg.results[i]);
-        cur_y = 1 + 6 * (i % 10);
-        q[len] = '\0';
+        cur_y = 2 + 6 * (i % 10);
         if(game.checkSolved(i, 0))
             jay.smallPrint(cur_x, cur_y, dawg.results[i]);
         else
-            jay.smallPrint(cur_x, cur_y, q);
-        q[len] = '?';
-        if ((i % 10 == 9) && (i < dawg.results_ptr - 1))
+            jay.smallPrint(cur_x, cur_y, "??????" + 6 - len);
+        if (i % 10 == 9)
             cur_x += 4 * len + 5;
     }
 }
