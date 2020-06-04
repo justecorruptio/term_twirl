@@ -42,14 +42,17 @@ int Dawg::process(int mode, uint32_t param) {
         op_param = param;
     }
 
-    traverse(DICT_DAWG_START_PTR[0], 0);
+    dict_ptr = 0;
+    traverse(DICT_DAWG_START_PTR[0]);
     if(easy_mode) return;
-    traverse(DICT_DAWG_START_PTR[1], 1);
-    traverse(DICT_DAWG_START_PTR[2], 2);
+    dict_ptr = 1;
+    traverse(DICT_DAWG_START_PTR[1]);
+    dict_ptr = 2;
+    traverse(DICT_DAWG_START_PTR[2]);
 }
 
-int Dawg::traverse(uint16_t ptr, int dict_ptr, int buf_ptr, uint32_t hash) {
-    uint16_t child_offset; // IMPORTANT! Never more that 2 ^ 16 nodes
+int Dawg::traverse(uint16_t ptr, int buf_ptr, uint32_t hash) {
+    uint16_t child_offset; // IMPORTANT! Never more that 2 ^ 12 nodes
     char high;
     uint32_t next_hash;
     uint16_t addr;
@@ -86,7 +89,7 @@ int Dawg::traverse(uint16_t ptr, int dict_ptr, int buf_ptr, uint32_t hash) {
         }
 
         if (child_offset)
-            traverse(child_offset, dict_ptr, buf_ptr + 1, next_hash);
+            traverse(child_offset, buf_ptr + 1, next_hash);
 
         ptr ++;
     } while (! (high & 0x2)); // List End

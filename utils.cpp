@@ -15,8 +15,10 @@ char * itoa(char * buf, int16_t x) {
         buf[0] = '0', buf[1] = '\0';
         return buf;
     }
+    /*
     else if(x < 0)
         x = -x, *(buf++) = '-';
+    */
 
     for(i = 0; x; i ++, x /= 10)
         buf[i] = (x % 10) + '0';
