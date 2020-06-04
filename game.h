@@ -9,6 +9,8 @@
 #define STAGE_NEXT 4
 #define STAGE_GAME_OVER 5
 
+#define EEPROM_MAGIC 0x90C5
+
 class Game {
     public:
 
@@ -21,8 +23,7 @@ class Game {
     char target_solved = 0;
     uint16_t time_left;
 
-    void loadHighScore();
-    void setHighScore();
+    void highScore();
 
     uint16_t score = 0;
     uint16_t high_score = 0;

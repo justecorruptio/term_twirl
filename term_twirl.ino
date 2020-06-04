@@ -38,7 +38,7 @@ void setup() {
     jay.invert(1);
     jay.clear();
 
-    game.loadHighScore();
+    game.highScore();
 }
 
 void loop() {
@@ -81,10 +81,7 @@ void loop() {
                     game.stage = STAGE_NEXT;
                 }
                 game.score += (len - 2) * (len - 2);
-                if (game.score > game.high_score) {
-                    game.high_score = game.score;
-                    game.setHighScore();
-                }
+                game.highScore();
             }
             display.setMessage(MESSAGES[
                 res < 0? -res - 1: solved? len: 7

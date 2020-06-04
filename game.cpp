@@ -1,7 +1,5 @@
 #include "game.h"
 
-const uint16_t EEPROM_MAGIC = 0x90C4;
-
 int Game::reset() {
     solved_mask[0] = 0;
     solved_mask[1] = 0;
@@ -9,6 +7,7 @@ int Game::reset() {
     target_solved = 0;
     time_left = 9999;
 }
+
 int Game::checkSolved(int index, char setIfUnset) {
     int solved_ptr = 0;
     uint16_t mask;
@@ -27,18 +26,20 @@ int Game::checkSolved(int index, char setIfUnset) {
     return 1;
 }
 
-void Game::loadHighScore() {
-    uint16_t v;
-    EEPROM.get(256, v);
-    if(v != EEPROM_MAGIC) {
-        EEPROM.put(256, EEPROM_MAGIC);
-        high_score = 0;
-        setHighScore();
-        return;
-    }
-    EEPROM.get(264, high_score);
-}
+void Game::highScore() {
+    struct{
+        uint16_t magic;
+        uint16_t hs;
+    } v;
 
-void Game::setHighScore() {
-    EEPROM.put(264, high_score);
+    EEPROM.get(256, v);
+    if(v.magic != EEPROM_MAGIC) {
+        v.magic = EEPROM_MAGIC;
+        v.hs = 0;
+    }
+    if (score > v.hs)
+        v.hs = score;
+    EEPROM.put(256, v);
+
+    high_score = v.hs;
 }
