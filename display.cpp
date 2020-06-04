@@ -43,7 +43,6 @@ int Display::renderDawgResults() {
 }
 
 int Display::renderChrome() {
-    char buf[8];
     jay.drawFastVLine(76, 0, 36, 1);
     jay.drawFastHLine(76, 13, 52, 1);
     jay.drawFastHLine(76, 36, 52, 1);
@@ -52,16 +51,15 @@ int Display::renderChrome() {
     jay.drawFastHLine(76, 50, 52, 1);
 
     jay.smallPrint(78, 1, "SCORE:");
-    jay.smallPrint(102, 1, itoa(buf, game.score));
+    jay.smallPrint(102, 1, itoa(game.score));
 
     jay.smallPrint(78, 7, " HIGH:");
-    jay.smallPrint(102, 7, itoa(buf, game.high_score));
+    jay.smallPrint(102, 7, itoa(game.high_score));
 }
 
 int Display::renderTime() {
-    char buf[8];
     jay.smallPrint(78, 15, " TIME:");
-    jay.smallPrint(102, 15, itoa(buf, game.time_left / 10));
+    jay.smallPrint(102, 15, itoa(game.time_left / 10));
 }
 
 int Display::renderTitle() {
