@@ -30,6 +30,7 @@ class Dawg {
 
     char easy_mode = 1;
     uint8_t * dict_dawg;
+    uint8_t * dict_dawg_chars;
 };
 
 #endif

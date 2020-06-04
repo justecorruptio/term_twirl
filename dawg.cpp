@@ -4,6 +4,10 @@ const uint8_t * DICT_DAWG [] = {
     DICT_DAWG_EASY,
     DICT_DAWG_HARD
 };
+const uint8_t * DICT_DAWG_CHARS [] = {
+    DICT_DAWG_EASY_CHARS,
+    DICT_DAWG_HARD_CHARS
+};
 const uint16_t DICT_DAWG_START_PTR [] = {
     DICT_DAWG_EASY_START_PTR,
     DICT_DAWG_HARD_START_PTR
@@ -31,34 +35,43 @@ int Dawg::process(int mode, uint32_t param) {
         op_param = param;
     }
     dict_dawg = DICT_DAWG[0];
-    traverse(DICT_DAWG_START_PTR[0] * 3);
+    dict_dawg_chars = DICT_DAWG_CHARS[0];
+    traverse(DICT_DAWG_START_PTR[0]);
 
     if(easy_mode) return;
 
     dict_dawg = DICT_DAWG[1];
-    traverse(DICT_DAWG_START_PTR[1] * 3);
+    dict_dawg_chars = DICT_DAWG_CHARS[1];
+    traverse(DICT_DAWG_START_PTR[1]);
 }
 
 int Dawg::traverse(uint16_t ptr, int buf_ptr, uint32_t hash) {
-    union {
-        uint32_t whole;
-        struct {
-            // IMPORTANT! Never more that 2 ^ 16 nodes
-            uint16_t child_offset;
-            char high;
-        };
-    } w;
+    uint16_t child_offset; // IMPORTANT! Never more that 2 ^ 16 nodes
+    char high;
     uint32_t next_hash;
+    uint16_t a, b, c;
 
     do {
-        w.whole = pgm_read_dword(dict_dawg + ptr);
+        //child_offset = pgm_read_word(dict_dawg + ptr * 2);
+        if ((ptr % 4) == 3) {
+            a = pgm_read_word(dict_dawg + (ptr / 4) * 3 * 2 + 0);
+            b = pgm_read_word(dict_dawg + (ptr / 4) * 3 * 2 + 2);
+            c = pgm_read_word(dict_dawg + (ptr / 4) * 3 * 2 + 4);
+            child_offset = (
+                ((a >> 12) & 0x000F) | ((b >> 8) & 0x00F0) | ((c >> 4) & 0x0F00)
+            );
+        } else {
+            child_offset = pgm_read_word(dict_dawg + ((ptr / 4) * 3 + (ptr % 4)) * 2) & 0x0FFF;
+        }
+
+        high = pgm_read_byte(dict_dawg_chars + ptr);
 
         // Though the DAWG spec allows the character to be '\0',
         // it never is base on how the dawg is generated.
-        buffer[buf_ptr] = (w.high >> 2) + 'A' - 1;
+        buffer[buf_ptr] = (high >> 2) + 'A' - 1;
         next_hash = hash * (LETTER_TO_PRIME_BY_FREQ - 'A')[buffer[buf_ptr]];
 
-        if (w.high & 0x1) { // Word End
+        if (high & 0x1) { // Word End
             if(op_mode == OP_MODE_SELECT) {
                 if((buf_ptr + 1 == TARGET_LENGTH) && (--op_param == 0)){
                     strcpy(results[0], buffer);
@@ -70,11 +83,11 @@ int Dawg::traverse(uint16_t ptr, int buf_ptr, uint32_t hash) {
             }
         }
 
-        if (w.child_offset)
-            traverse(w.child_offset * 3, buf_ptr + 1, next_hash);
+        if (child_offset)
+            traverse(child_offset, buf_ptr + 1, next_hash);
 
-        ptr += 3;
-    } while (! (w.high & 0x2)); // List End
+        ptr ++;
+    } while (! (high & 0x2)); // List End
 
     buffer[buf_ptr] = 0;
 }
