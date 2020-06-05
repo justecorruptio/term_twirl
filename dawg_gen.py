@@ -13,21 +13,10 @@ from time import clock
 
 filename = argv[1]
 inp = argv[2]
-time = clock()
 
-print "Checking word list...", 
-try:
-    wordlist = open(filename).read().split()
-except IOError:
-    print "File not found."
-    exit(1)
-if not all(all(c.isupper() for c in w) for w in wordlist) or any(b < a for a,b in zip(wordlist, wordlist[1:])):
-    print
-    print "Invalid word list; please include alphabetically sorted uppercase words delimited by space or newline."
-    exit(1) 
-print "OK".ljust(13),
-
-print "finished in {:.4} seconds.".format(clock()-time)
+wordlist = open(filename).read().split()
+assert all(w.isupper() for w in wordlist)
+assert sorted(wordlist) == wordlist
 
 ######################## Build Trie #########################################
 
@@ -37,12 +26,13 @@ class SeqTrie(object):
         self.is_end = is_end
         self.val = val
         self.end_of_list = end_of_list
-        for x in init: 
+        for x in init:
             self.add(x)
 
     def add(self, word):
         for c in word:
-            if not self.children or self.children[-1].val != c: #only works on pre-sorted word lists! 
+            #only works on pre-sorted word lists!
+            if not self.children or self.children[-1].val != c:
                 self.children.append(SeqTrie())
             self = self.children[-1]
             self.val = c
@@ -55,15 +45,9 @@ class SeqTrie(object):
         yield self
 
 
-t = clock()
-print "Building trie...".ljust(35),
 trie = SeqTrie(wordlist)
-print "finished in {:.4} seconds.".format(clock()-t)
 
 ################### Generate hashes/merge nodes,  ###########################
-
-t = clock()
-print "Merging redundant nodes...".ljust(35),
 
 node_dict = {}
 for x in trie:
@@ -81,13 +65,7 @@ for x in node_dict.itervalues():
     x.children = clist_dict[x.children]
 
 
-print "finished in {:.4} seconds.".format(clock()-t)
-
-
 ########################## Merge child lists ###############################
-
-t = clock()
-print "Merging child lists...".ljust(35),
 
 inverse_dict = defaultdict(list)
 compress_dict = {x:[x] for x in clist_dict.itervalues() if x}
@@ -109,12 +87,7 @@ for clist in sorted(compress_dict.keys(), key = lambda x:(len(x), -1*sum(len(inv
 
 compress_dict = {x:l for x,l in compress_dict.iteritems() if l}
 
-print "finished in {:.4} seconds.".format(clock()-t)
-
-
 #################### Create compressed trie structure #######################
-t = clock()
-print "Creating compressed node array...".ljust(35),
 
 end_node = SeqTrie(init = (), is_end = False, val = "", end_of_list = True)
 end_node.children = ()
@@ -151,13 +124,7 @@ root_node = SeqTrie(init = (), is_end = False, val = "", end_of_list = True)
 root_node.children = root
 array.append(root_node)
 
-print "finished in {:.4} seconds.".format(clock()-t)
-
 ######################### check trie ###################################
-
-t = clock()
-print "Checking output correctness...",
-
 
 def extract_words(array, i=root, carry = ""):
     node = array[i]
@@ -172,53 +139,23 @@ def extract_words(array, i=root, carry = ""):
         i += 1
         node = array[i]
 
-if set(extract_words(array)) == set(wordlist):
-    print "OK".ljust(4), "finished in {:.4} seconds.".format(clock()-t)
-else:
-    print "INVALID OUTPUT: trie does not match original word list."
-    exit(1)
-print 
-print "Compression finished in {:.4} seconds.".format(clock()-time)
+assert set(extract_words(array)) == set(wordlist)
 print "Number of nodes:", len(array)
-print
-
 
 ################## export as bitpacked array binaries #########################
 
-mode = "3"
+output = ar.array('B', [0]*(len(array)*3))
 
-t = clock()
-print
-print "Exporting as bit-packed array...",
+for i,x in enumerate(array):
+    i *= 3
+    a, b, c = i, i+1, i+2
+    output[a] = (x.children & 0b00000000011111111)
+    output[b] = (x.children & 0b01111111100000000) >> 8
+    output[c] = (x.children & 0b10000000000000000) >> 9
+    output[c] |= ((ord(x.val) - ord('A') + 1 if x.val else 0) << 2) # 0 is reserved for root and end-of-trie nodes
+    output[c] |= (x.end_of_list<<1)
+    output[c] |= (x.is_end)
 
-if mode == "4":
-    output = ar.array('L', [0]*len(array))
-
-    for i,x in enumerate(array):
-        output[i] |= (x.children << 10)
-        output[i] |= ((ord(x.val) if x.val else 0) << 2)
-        output[i] |= (x.end_of_list<<1)
-        output[i] |= (x.is_end)
-    outfile = open(inp, "wb")
-    output.tofile(outfile)
-    outfile.close()
-    print "finished in {:.4} seconds.".format(clock()-t)
-
-elif mode == "3":
-    output = ar.array('B', [0]*(len(array)*3))
-
-    for i,x in enumerate(array):
-        i *= 3
-        a, b, c = i, i+1, i+2
-        output[a] = (x.children & 0b00000000011111111)
-        output[b] = (x.children & 0b01111111100000000) >> 8
-        output[c] = (x.children & 0b10000000000000000) >> 9
-        output[c] |= ((ord(x.val) - ord('A') + 1 if x.val else 0) << 2) # 0 is reserved for root and end-of-trie nodes
-        output[c] |= (x.end_of_list<<1)
-        output[c] |= (x.is_end)
-
-    outfile = open(inp, "wb")
-    output.tofile(outfile)
-    outfile.close()
-    print "finished in {:.4} seconds.".format(clock()-t)
-
+outfile = open(inp, "wb")
+output.tofile(outfile)
+outfile.close()
