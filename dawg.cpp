@@ -80,9 +80,9 @@ int Dawg::traverse(uint16_t ptr, int buf_ptr, uint32_t hash) {
         addr = DICT_DAWG[dict_ptr] + (ptr / 4) * 3 * 2;
         if (ptr % 4 == 3) {
             child_offset = (
-                ((pgm_read_byte(addr + 1) >> 4) & 0x000F) |
-                ((pgm_read_byte(addr + 3) >> 0) & 0x00F0) |
-                ((pgm_read_byte(addr + 5) << 4) & 0x0F00)
+                ((pgm_read_byte(addr + 1) / 16) & 0x000F) |
+                ((pgm_read_byte(addr + 3)     ) & 0x00F0) |
+                ((pgm_read_byte(addr + 5) * 16) & 0x0F00)
             );
         } else {
             child_offset = pgm_read_word(addr + (ptr % 4) * 2) & 0x0FFF;

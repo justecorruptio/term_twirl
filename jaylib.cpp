@@ -8,8 +8,8 @@ void Jaylib::drawBand(int x, int y, const uint8_t * sprite, uint8_t cols) {
     for(; cols --; p --) {
         s = pgm_read_byte(sprite + cols) << (y & 0x7);
 
-        sBuffer[p] |= s & 0xFF;
-        sBuffer[p + WIDTH] |= ((s >> 8) & 0xFF);
+        sBuffer[p] |= s;
+        sBuffer[p + WIDTH] |= s >> 8;
     }
 }
 
