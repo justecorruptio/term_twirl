@@ -92,21 +92,21 @@ int Display::renderGuess() {
 }
 
 int Display::renderCursor() {
-    int i, t, a, b;
+    int i, j, a, b, x, y;
     cursor_counter ++;
 
-    for(i = 11; i--;){
-        a = (i + cursor_counter / 4) % 4;
-        b = (i - cursor_counter / 4) % 4;
-        t = 78 + 8 * guess.cursor_pos;
-        jay.drawPixel(t, 52 + i, a == 0);
-        jay.drawPixel(t + 8, 52 + i, b == 0);
+    x = 78 + 8 * guess.cursor_pos;
+    y = 52;
 
-        if (i >= 9) continue;
-
-        t = 78 + 8 * guess.cursor_pos + i;
-        jay.drawPixel(t, 52, b == 0);
-        jay.drawPixel(t, 62, a == 2);
+    for(i = (cursor_counter / 4) % 4; i < 36; i += 4){
+        j = i % 9;
+        switch(i / 9){
+            case 0: a = x + j; b = y; break;
+            case 1: a = x + 8; b = y + j + 1; break;
+            case 2: a = x + 8 - j; b = y + 10; break;
+            case 3: a = x; b = y + 9 - j; break;
+        }
+        jay.drawPixel(a, b, 1);
     }
 }
 
