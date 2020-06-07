@@ -19,15 +19,13 @@ const char* MESSAGES [] = {
 };
 
 void load() {
-    uint32_t word_hash;
-
     jay.initRandomSeed();
-    dawg.process(OP_MODE_SELECT, 0);
-    word_hash = lex_hash(dawg.results[0]);
+    dawg.process(OP_MODE_SELECT);
 
     guess.reset(dawg.results[0]);
 
-    dawg.process(OP_MODE_LOAD, word_hash);
+    strcpy(dawg.op_word, dawg.results[0]);
+    dawg.process(OP_MODE_LOAD);
     dawg.sort_results();
 
     game.reset();

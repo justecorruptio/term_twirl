@@ -22,11 +22,10 @@ const uint16_t DICT_DAWG_NUM_TARGETS [] = {
 };
 
 
-int Dawg::process(uint8_t mode, uint32_t param) {
+int Dawg::process(uint8_t mode) {
     op_mode = mode;
 
-    ((uint32_t *)buffer)[0] = 0;
-    ((uint32_t *)buffer)[1] = 0;
+    memset(buffer, '\0', 8);
     results_ptr = 0;
     if(mode == OP_MODE_SELECT) {
         if (easy_mode)
@@ -38,8 +37,6 @@ int Dawg::process(uint8_t mode, uint32_t param) {
                 DICT_DAWG_NUM_TARGETS[2] +
                 - 1
             );
-    }else{
-        op_param = param;
     }
 
     dict_ptr = 0;
@@ -51,10 +48,9 @@ int Dawg::process(uint8_t mode, uint32_t param) {
     traverse(DICT_DAWG_START_PTR[2]);
 }
 
-int Dawg::traverse(uint16_t ptr, uint8_t buf_ptr, uint32_t hash) {
+int Dawg::traverse(uint16_t ptr, uint8_t buf_ptr) {
     uint16_t child_offset; // IMPORTANT! Never more that 2 ^ 12 nodes
     char high;
-    uint32_t next_hash;
     uint16_t addr;
 
     do {
@@ -63,14 +59,13 @@ int Dawg::traverse(uint16_t ptr, uint8_t buf_ptr, uint32_t hash) {
         // Though the DAWG spec allows the character to be '\0',
         // it never is base on how the dawg is generated.
         buffer[buf_ptr] = (high >> 2) + 'A' - 1;
-        next_hash = hash * (LETTER_TO_PRIME_BY_FREQ - 'A')[buffer[buf_ptr]];
 
         if (high & 0x1) { // Word End
             if(op_mode == OP_MODE_SELECT) {
                 if((buf_ptr + 1 == TARGET_LENGTH) && (--op_param == 0)){
                     strcpy(results[0], buffer);
                 }
-            } else if(op_param % next_hash == 0) {
+            } else if(is_subset(buffer, op_word)) {
                 // This should never overflow since the generator
                 // script doesn't allow more than 30 subanagrams.
                 strcpy(results[results_ptr ++], buffer);
@@ -89,7 +84,7 @@ int Dawg::traverse(uint16_t ptr, uint8_t buf_ptr, uint32_t hash) {
         }
 
         if (child_offset)
-            traverse(child_offset, buf_ptr + 1, next_hash);
+            traverse(child_offset, buf_ptr + 1);
 
         ptr ++;
     } while (! (high & 0x2)); // List End
