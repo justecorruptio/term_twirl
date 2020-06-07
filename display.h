@@ -16,6 +16,7 @@ class Display {
 
     int renderDawgResults();
     int renderChrome();
+    int renderScore();
     int renderTime();
     int renderGuess();
 

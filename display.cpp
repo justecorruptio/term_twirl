@@ -4,6 +4,7 @@ Display::Display(Jaylib &arg_jay, Dawg &arg_dawg, Guess &arg_guess, Game &arg_ga
 :jay(arg_jay), dawg(arg_dawg), guess(arg_guess), game(arg_game) {}
 
 int Display::render() {
+    cursor_counter ++;
     switch(game.stage) {
         case STAGE_TITLE:
         renderTitle();
@@ -21,6 +22,7 @@ int Display::render() {
             setMessage("NEXT ROUND!", 1);
         renderChrome();
         renderDawgResults();
+        renderScore();
         renderTime();
         renderMessage();
         break;
@@ -49,21 +51,22 @@ int Display::renderChrome() {
 
     jay.drawFastVLine(76, 50, 14, 1);
     jay.drawFastHLine(76, 50, 52, 1);
+}
 
+int Display::renderScore() {
     jay.smallPrint(78, 1, "SCORE:");
-    jay.smallPrint(102, 1, itoa(game.score));
+    jay.smallPrint(82, 7, "HIGH:");
 
-    jay.smallPrint(78, 7, " HIGH:");
+    jay.smallPrint(102, 1, itoa(game.score));
     jay.smallPrint(102, 7, itoa(game.high_score));
 }
 
 int Display::renderTime() {
-    jay.smallPrint(78, 15, " TIME:");
+    jay.smallPrint(82, 15, "TIME:");
     jay.smallPrint(102, 15, itoa(game.time_left / 10));
 }
 
 int Display::renderTitle() {
-    int a;
     jay.largePrint(33, 20, "TERM TWIRL");
     jay.drawFastHLine(33, 28, 59, 1);
     jay.drawFastHLine(37, 30, 51, 1);
@@ -71,10 +74,9 @@ int Display::renderTitle() {
     jay.smallPrint(46, 34, "EASY MODE");
     jay.smallPrint(46, 40, "HARD MODE");
 
-    cursor_counter ++;
     jay.smallPrint(
-        38 + (cursor_counter % 12) / 3,
-        34 + 6 * !dawg.easy_mode, ">"
+        38 + (cursor_counter / 4) % 4,
+        40 - 6 * dawg.easy_mode, ">"
     );
 }
 
@@ -85,7 +87,6 @@ int Display::renderGuess() {
 
 int Display::renderCursor() {
     int i, j, a, b, x, y;
-    cursor_counter ++;
 
     x = 78 + 8 * guess.cursor_pos;
     y = 52;
