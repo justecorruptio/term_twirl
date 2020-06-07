@@ -39,15 +39,18 @@ void Dawg::process(uint8_t mode) {
         );
 
     dict_ptr = 0;
+    depth = 0;
     traverse(DICT_DAWG_START_PTR[0]);
     if(easy_mode) return;
     dict_ptr = 1;
+    depth = 0;
     traverse(DICT_DAWG_START_PTR[1]);
     dict_ptr = 2;
+    depth = 0;
     traverse(DICT_DAWG_START_PTR[2]);
 }
 
-void Dawg::traverse(uint16_t ptr, uint8_t buf_ptr) {
+void Dawg::traverse(uint16_t ptr) {
     uint16_t child_offset; // IMPORTANT! Never more that 2 ^ 12 nodes
     char high;
     uint16_t addr;
@@ -57,11 +60,11 @@ void Dawg::traverse(uint16_t ptr, uint8_t buf_ptr) {
 
         // Though the DAWG spec allows the character to be '\0',
         // it never is base on how the dawg is generated.
-        buffer[buf_ptr] = (high >> 2) + 'A' - 1;
+        buffer[depth] = (high >> 2) + 'A' - 1;
 
         if (high & 0x1) { // Word End
             if(op_mode == OP_MODE_SELECT) {
-                if((buf_ptr + 1 == TARGET_LENGTH) && (--op_param == 0)){
+                if((depth + 1 == TARGET_LENGTH) && (--op_param == 0)){
                     strcpy(op_word, buffer);
                 }
             } else if(is_subset(buffer, op_word)) {
@@ -82,13 +85,16 @@ void Dawg::traverse(uint16_t ptr, uint8_t buf_ptr) {
             child_offset = pgm_read_word(addr + (ptr % 4) * 2) & 0x0FFF;
         }
 
-        if (child_offset)
-            traverse(child_offset, buf_ptr + 1);
+        if (child_offset) {
+            depth ++;
+            traverse(child_offset);
+            depth --;
+        }
 
         ptr ++;
     } while (! (high & 0x2)); // List End
 
-    buffer[buf_ptr] = 0;
+    buffer[depth] = 0;
 }
 
 void Dawg::sort_results() {

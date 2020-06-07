@@ -15,7 +15,7 @@ class Dawg {
     public:
 
     void process(uint8_t mode);
-    void traverse(uint16_t ptr, uint8_t buf_ptr=0);
+    void traverse(uint16_t ptr);
 
     void sort_results();
     int8_t checkWord(char* word);
@@ -29,6 +29,8 @@ class Dawg {
     uint8_t op_mode;
     uint32_t op_param;
     uint8_t dict_ptr;
+
+    uint8_t depth;
 
     uint8_t easy_mode = 1;
 
