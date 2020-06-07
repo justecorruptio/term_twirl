@@ -3,7 +3,6 @@
 int Guess::reset(char * input_letters) {
     strcpy(letters, input_letters);
 
-    guess_mask = 0x0;
     guess_ptr = 0;
     guess[0] = '\0';
     guess_word[0] = '\0';
@@ -22,21 +21,23 @@ int Guess::cursorRight() {
 }
 
 int Guess::handleSelect() {
-    if(guess_mask & (1 << cursor_pos) || guess_ptr >= 6)
+    if(letters[cursor_pos] == ' ')
         return;
 
     guess_word[guess_ptr] = letters[cursor_pos];
+    letters[cursor_pos] = ' ';
     guess[guess_ptr] = cursor_pos;
 
     guess_word[++ guess_ptr] = '\0';
-    guess_mask |= (1 << cursor_pos);
 }
 
 int Guess::handleDelete() {
     if (guess_ptr <= 0)
         return;
-    guess_word[-- guess_ptr] = '\0';
-    guess_mask &= ~(1 << guess[guess_ptr]);
+
+    guess_ptr --;
+    letters[guess[guess_ptr]] = guess_word[guess_ptr];
+    guess_word[guess_ptr] = '\0';
 }
 
 int Guess::handleReturnShuffle() {

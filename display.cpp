@@ -79,15 +79,7 @@ int Display::renderTitle() {
 }
 
 int Display::renderGuess() {
-    int i;
-    char buf[8];
-
-    for(i = 0; guess.letters[i]; i++)
-        buf[i] = guess.guess_mask & (1 << i) ?  ' ' : guess.letters[i];
-
-    buf[i] = '\0';
-
-    jay.largePrint(80, 54, buf, 3);
+    jay.largePrint(80, 54, guess.letters, 3);
     jay.largePrint(80, 40, guess.guess_word, 3);
 }
 

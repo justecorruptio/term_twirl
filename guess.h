@@ -10,7 +10,6 @@ class Guess {
     char guess[8];
     char guess_word[8] = "";
     int guess_ptr = 0;
-    uint8_t guess_mask;
 
     int cursor_pos = 0;
 
