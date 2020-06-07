@@ -14,11 +14,11 @@
 class Dawg {
     public:
 
-    int process(uint8_t mode);
-    int traverse(uint16_t ptr, uint8_t buf_ptr=0);
+    void process(uint8_t mode);
+    void traverse(uint16_t ptr, uint8_t buf_ptr=0);
 
-    int sort_results();
-    int checkWord(char* word);
+    void sort_results();
+    int8_t checkWord(char* word);
 
     char results[32][8];
     uint8_t results_ptr;

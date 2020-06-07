@@ -1,6 +1,6 @@
 #include "game.h"
 
-int Game::reset() {
+void Game::reset() {
     solved_mask[0] = 0;
     solved_mask[1] = 0;
     num_solved = 0;
@@ -8,7 +8,7 @@ int Game::reset() {
     time_left = 9999;
 }
 
-int Game::checkSolved(int index, char setIfUnset) {
+uint8_t Game::checkSolved(uint8_t index, char setIfUnset) {
     uint8_t solved_ptr;
     uint16_t mask;
 

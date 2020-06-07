@@ -5,6 +5,11 @@
 
 class Guess {
     public:
+    void reset(char * input_letters);
+    void cursorMove(uint8_t step);
+    void handleSelect();
+    void handleDelete();
+    void handleReturnShuffle();
 
     char letters[8];
     char guess[8];
@@ -12,15 +17,6 @@ class Guess {
     uint8_t guess_ptr = 0;
 
     uint8_t cursor_pos = 0;
-
-    int reset(char * input_letters);
-
-    int cursorMove(uint8_t step);
-
-    int handleSelect();
-    int handleDelete();
-
-    int handleReturnShuffle();
 };
 
 #endif

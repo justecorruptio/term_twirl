@@ -14,8 +14,10 @@
 class Game {
     public:
 
-    int reset();
-    int checkSolved(int index, char setIfUnset);
+    void reset();
+    uint8_t checkSolved(uint8_t index, char setIfUnset);
+
+    void highScore();
 
     uint8_t stage = STAGE_TITLE;
     uint16_t solved_mask[2] = {0, 0};
@@ -23,11 +25,8 @@ class Game {
     char target_solved = 0;
     uint16_t time_left;
 
-    void highScore();
-
     uint16_t score = 0;
     uint16_t high_score = 0;
-
 };
 
 #endif

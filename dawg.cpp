@@ -22,7 +22,7 @@ const uint16_t DICT_DAWG_NUM_TARGETS [] = {
 };
 
 
-int Dawg::process(uint8_t mode) {
+void Dawg::process(uint8_t mode) {
     op_mode = mode;
 
     memset(buffer, '\0', 8);
@@ -48,7 +48,7 @@ int Dawg::process(uint8_t mode) {
     traverse(DICT_DAWG_START_PTR[2]);
 }
 
-int Dawg::traverse(uint16_t ptr, uint8_t buf_ptr) {
+void Dawg::traverse(uint16_t ptr, uint8_t buf_ptr) {
     uint16_t child_offset; // IMPORTANT! Never more that 2 ^ 12 nodes
     char high;
     uint16_t addr;
@@ -92,7 +92,7 @@ int Dawg::traverse(uint16_t ptr, uint8_t buf_ptr) {
     buffer[buf_ptr] = 0;
 }
 
-int Dawg::sort_results() {
+void Dawg::sort_results() {
     char i, j, k, t, *a, *b, al, bl;
     for(i = results_ptr; i --;) {
         for(j = 0; j < i; j ++) {
@@ -106,7 +106,7 @@ int Dawg::sort_results() {
     }
 }
 
-int Dawg::checkWord(char* word) {
+int8_t Dawg::checkWord(char* word) {
     uint8_t i;
     for(i = 0; i < results_ptr; i++) {
         if(strcmp(word, results[i]) == 0)

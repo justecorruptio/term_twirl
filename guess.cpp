@@ -1,6 +1,6 @@
 #include "guess.h"
 
-int Guess::reset(char * input_letters) {
+void Guess::reset(char * input_letters) {
     strcpy(letters, input_letters);
 
     guess_ptr = 0;
@@ -10,12 +10,12 @@ int Guess::reset(char * input_letters) {
     handleReturnShuffle();
 }
 
-int Guess::cursorMove(uint8_t step) {
+void Guess::cursorMove(uint8_t step) {
     cursor_pos +=step;
     cursor_pos %= 6;
 }
 
-int Guess::handleSelect() {
+void Guess::handleSelect() {
     if(letters[cursor_pos] == ' ')
         return;
 
@@ -26,7 +26,7 @@ int Guess::handleSelect() {
     guess_word[++ guess_ptr] = '\0';
 }
 
-int Guess::handleDelete() {
+void Guess::handleDelete() {
     if (guess_ptr <= 0)
         return;
 
@@ -35,7 +35,7 @@ int Guess::handleDelete() {
     guess_word[guess_ptr] = '\0';
 }
 
-int Guess::handleReturnShuffle() {
+void Guess::handleReturnShuffle() {
     uint8_t i, a, b;
     char t;
     if(guess_ptr) {
