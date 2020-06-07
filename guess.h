@@ -15,8 +15,7 @@ class Guess {
 
     int reset(char * input_letters);
 
-    int cursorLeft();
-    int cursorRight();
+    int cursorMove(int step);
 
     int handleSelect();
     int handleDelete();

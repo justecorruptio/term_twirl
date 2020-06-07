@@ -62,8 +62,8 @@ void loop() {
         break;
 
         case STAGE_PLAY:
-        if(jay.justPressed(LEFT_BUTTON))  guess.cursorLeft();
-        if(jay.justPressed(RIGHT_BUTTON)) guess.cursorRight();
+        if(jay.justPressed(LEFT_BUTTON))  guess.cursorMove(5);
+        if(jay.justPressed(RIGHT_BUTTON)) guess.cursorMove(1);
         if(jay.justPressed(UP_BUTTON))    guess.handleSelect();
         if(jay.justPressed(DOWN_BUTTON))  guess.handleDelete();
         if(jay.justPressed(B_BUTTON))     guess.handleReturnShuffle();

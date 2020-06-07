@@ -10,14 +10,9 @@ int Guess::reset(char * input_letters) {
     handleReturnShuffle();
 }
 
-int Guess::cursorLeft() {
-    cursor_pos --;
-    if (cursor_pos < 0) cursor_pos = 5;
-}
-
-int Guess::cursorRight() {
-    cursor_pos ++;
-    if (cursor_pos >= 6) cursor_pos = 0;
+int Guess::cursorMove(int step) {
+    cursor_pos +=step;
+    cursor_pos %= 6;
 }
 
 int Guess::handleSelect() {
@@ -43,17 +38,18 @@ int Guess::handleDelete() {
 int Guess::handleReturnShuffle() {
     int i, a, b;
     char t;
-    if(guess_ptr > 0) {
+    if(guess_ptr) {
         while(guess_ptr) {
             handleDelete();
         }
     } else {
-        for(i = 0; i < 11; i++) {
-            a = random(0, 6);
+        a = 0;
+        for(i = 0; i < 16; i++) {
             b = random(0, 6);
             t = letters[a];
             letters[a] = letters[b];
             letters[b] = t;
+            a = b;
         }
     }
 }
