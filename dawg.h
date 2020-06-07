@@ -14,22 +14,22 @@
 class Dawg {
     public:
 
-    int process(int mode, uint32_t param);
-    int traverse(uint16_t ptr, int buf_ptr=0, uint32_t hash=1);
+    int process(uint8_t mode, uint32_t param);
+    int traverse(uint16_t ptr, uint8_t buf_ptr=0, uint32_t hash=1);
 
     int sort_results();
     int checkWord(char* word);
 
     char results[32][8];
-    int results_ptr;
+    uint8_t results_ptr;
 
     //private:
     char buffer[8];
-    int op_mode;
+    uint8_t op_mode;
     uint32_t op_param;
-    int dict_ptr;
+    uint8_t dict_ptr;
 
-    char easy_mode = 1;
+    uint8_t easy_mode = 1;
 
 };
 

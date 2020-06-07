@@ -31,9 +31,9 @@ class Display {
     int setMessage(char* msg, uint16_t arg_messageTTL = 50);
     int renderMessage();
     char * message_ptr;
-    uint16_t messageTTL;
+    uint8_t messageTTL;
 
-    uint16_t cursor_counter = 0;
+    uint8_t cursor_counter = 0;
 };
 
 #endif

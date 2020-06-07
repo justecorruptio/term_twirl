@@ -30,8 +30,7 @@ int Display::render() {
 }
 
 int Display::renderDawgResults() {
-    int i, len;
-    int cur_x = 1, cur_y;
+    uint8_t i, len, cur_x = 1, cur_y;
     for(i = 0; i < dawg.results_ptr; i++) {
         len = strlen(dawg.results[i]);
         cur_y = 2 + 6 * (i % 10);
@@ -45,12 +44,12 @@ int Display::renderDawgResults() {
 }
 
 int Display::renderChrome() {
-    jay.drawFastVLine(76, 0, 36, 1);
-    jay.drawFastHLine(76, 13, 52, 1);
-    jay.drawFastHLine(76, 36, 52, 1);
+    jay.drawFastVLine(76, 0, 36);
+    jay.drawFastHLine(76, 13, 52);
+    jay.drawFastHLine(76, 36, 52);
 
-    jay.drawFastVLine(76, 50, 14, 1);
-    jay.drawFastHLine(76, 50, 52, 1);
+    jay.drawFastVLine(76, 50, 14);
+    jay.drawFastHLine(76, 50, 52);
 }
 
 int Display::renderScore() {
@@ -68,8 +67,8 @@ int Display::renderTime() {
 
 int Display::renderTitle() {
     jay.largePrint(33, 20, "TERM TWIRL");
-    jay.drawFastHLine(33, 28, 59, 1);
-    jay.drawFastHLine(37, 30, 51, 1);
+    jay.drawFastHLine(33, 28, 59);
+    jay.drawFastHLine(37, 30, 51);
 
     jay.smallPrint(46, 34, "EASY MODE");
     jay.smallPrint(46, 40, "HARD MODE");
@@ -86,7 +85,7 @@ int Display::renderGuess() {
 }
 
 int Display::renderCursor() {
-    int i, j, a, b, x, y;
+    uint8_t i, j, a, b, x, y;
 
     x = 78 + 8 * guess.cursor_pos;
     y = 52;
@@ -99,7 +98,7 @@ int Display::renderCursor() {
             case 2: a = x + 8 - j; b = y + 10; break;
             case 3: a = x; b = y + 9 - j; break;
         }
-        jay.drawPixel(a, b, 1);
+        jay.drawPixel(a, b);
     }
 }
 

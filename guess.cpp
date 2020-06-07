@@ -10,7 +10,7 @@ int Guess::reset(char * input_letters) {
     handleReturnShuffle();
 }
 
-int Guess::cursorMove(int step) {
+int Guess::cursorMove(uint8_t step) {
     cursor_pos +=step;
     cursor_pos %= 6;
 }
@@ -36,7 +36,7 @@ int Guess::handleDelete() {
 }
 
 int Guess::handleReturnShuffle() {
-    int i, a, b;
+    uint8_t i, a, b;
     char t;
     if(guess_ptr) {
         while(guess_ptr) {

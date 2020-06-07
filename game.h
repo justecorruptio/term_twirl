@@ -17,7 +17,7 @@ class Game {
     int reset();
     int checkSolved(int index, char setIfUnset);
 
-    int stage = STAGE_TITLE;
+    uint8_t stage = STAGE_TITLE;
     uint16_t solved_mask[2] = {0, 0};
     char num_solved = 0;
     char target_solved = 0;

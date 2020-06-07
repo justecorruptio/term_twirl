@@ -42,7 +42,8 @@ void setup() {
 }
 
 void loop() {
-    int res, len;
+    int8_t res;
+    uint8_t len;
     char solved = 0;
 
     if(!jay.nextFrame()) return;

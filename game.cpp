@@ -9,7 +9,7 @@ int Game::reset() {
 }
 
 int Game::checkSolved(int index, char setIfUnset) {
-    int solved_ptr;
+    uint8_t solved_ptr;
     uint16_t mask;
 
     solved_ptr = index / 16;
