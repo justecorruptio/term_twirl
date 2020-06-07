@@ -27,17 +27,16 @@ void Dawg::process(uint8_t mode) {
 
     memset(buffer, '\0', 8);
     results_ptr = 0;
-    if(mode == OP_MODE_SELECT) {
-        if (easy_mode)
-            op_param = random(1, DICT_DAWG_NUM_TARGETS[0] - 1);
-        else
-            op_param = random(1,
-                DICT_DAWG_NUM_TARGETS[0] +
-                DICT_DAWG_NUM_TARGETS[1] +
-                DICT_DAWG_NUM_TARGETS[2] +
-                - 1
-            );
-    }
+
+    if (easy_mode)
+        op_param = random(1, DICT_DAWG_NUM_TARGETS[0] - 1);
+    else
+        op_param = random(1,
+            DICT_DAWG_NUM_TARGETS[0] +
+            DICT_DAWG_NUM_TARGETS[1] +
+            DICT_DAWG_NUM_TARGETS[2] +
+            - 1
+        );
 
     dict_ptr = 0;
     traverse(DICT_DAWG_START_PTR[0]);
@@ -63,7 +62,7 @@ void Dawg::traverse(uint16_t ptr, uint8_t buf_ptr) {
         if (high & 0x1) { // Word End
             if(op_mode == OP_MODE_SELECT) {
                 if((buf_ptr + 1 == TARGET_LENGTH) && (--op_param == 0)){
-                    strcpy(results[0], buffer);
+                    strcpy(op_word, buffer);
                 }
             } else if(is_subset(buffer, op_word)) {
                 // This should never overflow since the generator

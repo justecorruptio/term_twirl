@@ -21,13 +21,10 @@ const char* MESSAGES [] = {
 void load() {
     jay.initRandomSeed();
     dawg.process(OP_MODE_SELECT);
-
-    guess.reset(dawg.results[0]);
-
-    strcpy(dawg.op_word, dawg.results[0]);
     dawg.process(OP_MODE_LOAD);
     dawg.sort_results();
 
+    guess.reset(dawg.op_word);
     game.reset();
 }
 
