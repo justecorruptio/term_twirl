@@ -109,7 +109,7 @@ int Display::setMessage(char* msg, uint16_t arg_messageTTL) {
 }
 
 int Display::renderMessage() {
-    if (! message_ptr || (messageTTL == 0))
+    if (messageTTL == 0)
         return;
     messageTTL --;
 
