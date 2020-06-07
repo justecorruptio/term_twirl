@@ -20,7 +20,7 @@ sixes = {}
 
 for line in fh:
     line = line.strip()
-    if len(line) == SIX and hx(line) <= 2 ** 32:
+    if len(line) == SIX: #and hx(line) <= 2 ** 32:
         sixes.setdefault(hx(line), set()).add(line)
 
 fh.close()
